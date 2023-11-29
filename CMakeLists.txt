@@ -3,4 +3,6 @@ project(2Projeto)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(2Projeto main.cpp)
+add_executable(2Projeto main.cpp
+        src/menu.cpp
+        src/menu.h)
