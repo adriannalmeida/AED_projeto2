@@ -8,8 +8,8 @@ using namespace std;
 
 class Airport {
 private:
-    string Code;
-    string Name;
+    string code;
+    string name;
     Country country;
     Coordinates coordinates;
 
