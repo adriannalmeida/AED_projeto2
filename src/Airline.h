@@ -13,9 +13,16 @@ private:
     string code;
     string name;
     string callSign;
-    string coutry;
+    //ou faz se um construtor só com country name na classe country? ou fica string aqui
+    string countryName;
 
 public:
+    Airline(string code, string name, string callSign, string countryName);
+    string getCode();
+    string getName();
+    string getCallSign();
+    string getcountryName();
+
 
 
 
