@@ -9,8 +9,8 @@ private:
     double longitude;
 public:
     Coordinates(double latitude, double longitude);
-    double getLatitude;
-    double getLongitude;
+    double getLatitude();
+    double getLongitude();
 };
 
 
