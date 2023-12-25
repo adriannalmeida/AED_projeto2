@@ -1,3 +1,0 @@
-/home/adriana/2leic/AED/2Projeto/cmake-build-debug/CMakeFiles/2Projeto.dir
-/home/adriana/2leic/AED/2Projeto/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/adriana/2leic/AED/2Projeto/cmake-build-debug/CMakeFiles/rebuild_cache.dir
