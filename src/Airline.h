@@ -10,8 +10,13 @@
 using namespace std;
 class Airline {
 private:
+    string code;
+    string name;
+    string callSign;
+    string coutry;
 
 public:
+
 
 
 };

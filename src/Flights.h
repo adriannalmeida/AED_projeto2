@@ -8,8 +8,11 @@ private:
     string src;
     string dest;
     Airline airline;
-
-
+public:
+    Flights(string src, string dest, Airline airline);
+    string getsrc();
+    string getdest();
+    Airline getAirline();
 };
 
 
