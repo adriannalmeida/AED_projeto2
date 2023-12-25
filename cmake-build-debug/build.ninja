@@ -79,6 +79,18 @@ build CMakeFiles/2Projeto.dir/src/Country.cpp.o: CXX_COMPILER__2Projeto_unscanne
   OBJECT_DIR = CMakeFiles/2Projeto.dir
   OBJECT_FILE_DIR = CMakeFiles/2Projeto.dir/src
 
+build CMakeFiles/2Projeto.dir/src/Flights.cpp.o: CXX_COMPILER__2Projeto_unscanned_Debug /home/adriana/2leic/AED/2Projeto/src/Flights.cpp || cmake_object_order_depends_target_2Projeto
+  DEP_FILE = CMakeFiles/2Projeto.dir/src/Flights.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/2Projeto.dir
+  OBJECT_FILE_DIR = CMakeFiles/2Projeto.dir/src
+
+build CMakeFiles/2Projeto.dir/src/Airlien.cpp.o: CXX_COMPILER__2Projeto_unscanned_Debug /home/adriana/2leic/AED/2Projeto/src/Airlien.cpp || cmake_object_order_depends_target_2Projeto
+  DEP_FILE = CMakeFiles/2Projeto.dir/src/Airlien.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/2Projeto.dir
+  OBJECT_FILE_DIR = CMakeFiles/2Projeto.dir/src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target 2Projeto
@@ -87,7 +99,7 @@ build CMakeFiles/2Projeto.dir/src/Country.cpp.o: CXX_COMPILER__2Projeto_unscanne
 #############################################
 # Link the executable 2Projeto
 
-build 2Projeto: CXX_EXECUTABLE_LINKER__2Projeto_Debug CMakeFiles/2Projeto.dir/main.cpp.o CMakeFiles/2Projeto.dir/src/menu.cpp.o CMakeFiles/2Projeto.dir/src/Airport.cpp.o CMakeFiles/2Projeto.dir/src/Coordinates.cpp.o CMakeFiles/2Projeto.dir/src/Country.cpp.o
+build 2Projeto: CXX_EXECUTABLE_LINKER__2Projeto_Debug CMakeFiles/2Projeto.dir/main.cpp.o CMakeFiles/2Projeto.dir/src/menu.cpp.o CMakeFiles/2Projeto.dir/src/Airport.cpp.o CMakeFiles/2Projeto.dir/src/Coordinates.cpp.o CMakeFiles/2Projeto.dir/src/Country.cpp.o CMakeFiles/2Projeto.dir/src/Flights.cpp.o CMakeFiles/2Projeto.dir/src/Airlien.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/2Projeto.dir
   POST_BUILD = :
