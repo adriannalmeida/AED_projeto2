@@ -7,10 +7,11 @@
 using namespace std;
 
 class menu {
+    public:
     menu();
     void run();
     void mainMenu();
-    void menu_Airport();
+    //void menu_Airport();
 };
 
 

@@ -23,7 +23,8 @@ void menu::mainMenu(){
     cin >> op;
     switch(op) {
         case 1: {
-            menu_Airport();
+            //menu_Airport();
+            cout << "iiiiii" << endl;
             break;
         }
 
