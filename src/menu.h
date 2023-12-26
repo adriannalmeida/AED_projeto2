@@ -2,6 +2,9 @@
 #define INC_2PROJETO_MENU_H
 
 #include <iostream>
+#include <vector>
+#include <unistd.h>
+#include <termios.h>
 using namespace std;
 
 class menu {
@@ -9,7 +12,10 @@ class menu {
     menu();
     void run();
     void mainMenu();
-    //void menu_Airport();
+    void menuStatistics();
+    void printMenu(vector<string> options, int size, int select);
+    void nonBlockingEntrance();
+    void restoreEntrace();
 };
 
 

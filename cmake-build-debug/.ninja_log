@@ -1,4 +1,13 @@
 # ninja log v5
-0	271	1703532864088211209	CMakeFiles/2Projeto.dir/src/menu.cpp.o	c2190da2a50ea683
-1	415	1703533009023748809	CMakeFiles/2Projeto.dir/main.cpp.o	936a296003080c95
-415	503	1703533009111748901	2Projeto	563f1e7eb1554c85
+1	321	1703552572171936733	CMakeFiles/2Projeto.dir/src/Coordinates.cpp.o	f28ebeb22a58e896
+1	322	1703552572171936733	CMakeFiles/2Projeto.dir/src/Airport.cpp.o	48889ec60e4b463f
+2	282	1703552659312535555	CMakeFiles/2Projeto.dir/src/Airline.cpp.o	e1ef7cb504f93db1
+1	284	1703552659312535555	CMakeFiles/2Projeto.dir/src/Flights.cpp.o	7913d0b2c99e4184
+1	359	1703558170059988165	CMakeFiles/2Projeto.dir/src/menu.cpp.o	c2190da2a50ea683
+1	298	1703558169995988103	CMakeFiles/2Projeto.dir/main.cpp.o	936a296003080c95
+359	418	1703558170115988219	2Projeto	adae3f1adb1c79b9
+1	428	1703552572279937482	CMakeFiles/2Projeto.dir/src/Country.cpp.o	1dc6aebb5ee465d6
+1	26	1703558517772756411	build.ninja	b50734d5a554b80f
+0	321	1703558518096757445	CMakeFiles/2Projeto.dir/main.cpp.o	936a296003080c95
+1	400	1703558518176757700	CMakeFiles/2Projeto.dir/src/menu.cpp.o	c2190da2a50ea683
+400	464	1703558518240757904	2Projeto	adae3f1adb1c79b9
