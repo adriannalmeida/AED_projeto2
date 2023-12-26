@@ -16,4 +16,6 @@ add_executable(2Projeto main.cpp
         src/Flights.cpp
         src/Flights.h
         src/Airline.cpp
-        src/Airline.h)
+        src/Airline.h
+        src/DataParser.cpp
+        src/DataParser.h)

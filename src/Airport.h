@@ -7,7 +7,7 @@
 using namespace std;
 
 class Airport {
-private:
+
     string code;
     string name;
     Country country;
@@ -19,6 +19,7 @@ public:
     string getName();
     Country getCountry();
     Coordinates getCoordinates();
+    bool operator==(const Airport& other) const;
 
 };
 

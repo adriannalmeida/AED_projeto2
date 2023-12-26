@@ -1,10 +1,11 @@
 #include "Flights.h"
 
+// wtf parser
+//Flights::Flights(std::string src, std::string dest, Airline airline): airline (airline) {
+//master
 Flights::Flights (std::string src, std::string dest, Airline airline) {
     this->src = src;
     this->dest = dest;
-    this->airline = airline;
-
 }
 
 string Flights:: getsrc(){

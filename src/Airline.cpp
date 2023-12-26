@@ -2,6 +2,7 @@
 
 Airline::Airline(){}
 Airline:: Airline (string code, string name, string callSign, string countryName){
+
     this->code = code;
     this->name = name;
     this->callSign = callSign;

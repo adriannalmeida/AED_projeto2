@@ -24,10 +24,6 @@ public:
     string getCallSign();
     string getcountryName();
 
-
-
-
 };
-
 
 #endif //INC_2PROJETO_AIRLINE_H
