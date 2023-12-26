@@ -7,7 +7,7 @@
 using namespace std;
 
 class Airport {
-private:
+
     string code;
     string name;
     Country country;

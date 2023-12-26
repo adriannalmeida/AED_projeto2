@@ -1,11 +1,11 @@
 #include "Airport.h"
 
-Airport ::Airport(std::string code, std::string name, Country country, Coordinates coordinates) {
+Airport::Airport(string code, string name, Country country,Coordinates coordinates)
+        : coordinates(coordinates), country(country) {
     this->code = code;
     this->name = name;
-    this->country = country;
-    this->coordinates = coordinates;
 }
+
 string Airport::getCode() {
     return this-> code;
 }
