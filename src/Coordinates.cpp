@@ -1,5 +1,7 @@
 #include "Coordinates.h"
 
+Coordinates::Coordinates() {}
+
 Coordinates::Coordinates(double latitude, double longitude){
     this-> latitude = latitude;
     this-> longitude = longitude;

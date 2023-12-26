@@ -1,6 +1,6 @@
 #include "Flights.h"
 
-Flights::Flights(std::string src, std::string dest, Airline airline) {
+Flights::Flights (std::string src, std::string dest, Airline airline) {
     this->src = src;
     this->dest = dest;
     this->airline = airline;
