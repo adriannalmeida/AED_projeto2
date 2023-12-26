@@ -10,6 +10,7 @@
 #include <stack>
 #include <list>
 #include "Airline.h"
+#include "Airport.h"
 
 using namespace std;
 
@@ -172,10 +173,11 @@ void Graph<T>::setVertexSet(Vertex<T> * vertex) {
 template <class T>
 Vertex<T> * Graph<T>::findVertex(const T &in) const {
     for (auto v : vertexSet)
-        if (static_cast<const T>(v->info) == in)
+        if (static_cast<const Airport>(v->info) == in)
             return v;
     return NULL;
 }
+
 
 template <class T>
 bool Vertex<T>::isVisited() const {

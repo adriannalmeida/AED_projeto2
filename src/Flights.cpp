@@ -1,10 +1,8 @@
 #include "Flights.h"
 
-Flights::Flights(std::string src, std::string dest, Airline airline) {
+Flights::Flights(std::string src, std::string dest, Airline airline): airline (airline) {
     this->src = src;
     this->dest = dest;
-    this->airline = airline;
-
 }
 
 string Flights:: getsrc(){

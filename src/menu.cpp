@@ -3,6 +3,13 @@ menu:: menu(){
 
 }
 void menu::run(){
+    DataParser* dataPtr = new DataParser("../dataset");
+    DataParser data = *dataPtr;
+    for(auto i : data.getTravels().getVertexSet()){
+        for (auto u : i->getAdj()){
+            cout << u.getAirline().getName();
+        }
+    }
     mainMenu();
 }
 

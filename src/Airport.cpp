@@ -21,4 +21,6 @@ Coordinates Airport::getCoordinates() {
     return this->coordinates;
 }
 
-
+bool Airport::operator==(const Airport& other) const {
+    return (code == other.code) && (name == other.name);
+}

@@ -33,7 +33,7 @@ void DataParser::readAirlines() {
 }
 void DataParser::readAirports() {
 
-    ifstream csv(path + "airports.csv");
+    ifstream csv(path + "/airports.csv");
     string line;
     getline(csv, line, '\n'); // Ignore Header
 
@@ -60,7 +60,7 @@ void DataParser::readAirports() {
 
 void DataParser::readFlights() {
 
-    ifstream csv(path + "flights.csv");
+    ifstream csv(path + "/flights.csv");
     string line;
     getline(csv, line, '\n'); // Ignore Header
 
@@ -93,4 +93,9 @@ void DataParser::readFlights() {
         }
 
         Travels.addEdge(*i, *u, *q);
-    }}
+    }
+}
+
+Graph<Airport> DataParser::getTravels() {
+    return Travels;
+}

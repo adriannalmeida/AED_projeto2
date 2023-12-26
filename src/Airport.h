@@ -19,6 +19,7 @@ public:
     string getName();
     Country getCountry();
     Coordinates getCoordinates();
+    bool operator==(const Airport& other) const;
 
 };
 

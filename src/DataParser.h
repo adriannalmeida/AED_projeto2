@@ -34,9 +34,10 @@ public:
 
     explicit DataParser(std::string path);
 
-    Vertex<Airport> getAirport() const;
+    Vertex<Airport> getAirport();
 
-    Edge<Flights> getFlightsGraph() const;
+    Edge<Flights> getFlightsGraph();
+    Graph<Airport> getTravels();
 };
 
 
