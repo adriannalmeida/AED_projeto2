@@ -17,14 +17,12 @@ private:
     string countryName;
 
 public:
+    Airline();
     Airline(string code, string name, string callSign, string countryName);
     string getCode();
     string getName();
     string getCallSign();
     string getcountryName();
-
-
-
 
 };
 

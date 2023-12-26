@@ -8,6 +8,7 @@ private:
     double latitude;
     double longitude;
 public:
+    Coordinates();
     Coordinates(double latitude, double longitude);
     double getLatitude();
     double getLongitude();

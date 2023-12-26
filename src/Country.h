@@ -9,6 +9,7 @@ private:
     string countryName;
     string city;
 public:
+    Country();
     Country(string countryName, string city);
     string getCountryName();
     string getCity();

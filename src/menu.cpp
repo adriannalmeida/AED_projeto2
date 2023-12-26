@@ -1,7 +1,5 @@
 #include "menu.h"
-menu:: menu(){
-
-}
+menu:: menu(){}
 void menu::run(){
     DataParser* dataPtr = new DataParser("../dataset");
     DataParser data = *dataPtr;
@@ -13,29 +11,81 @@ void menu::run(){
     mainMenu();
 }
 
-void menu::mainMenu(){
-    char op;
+void menu:: nonBlockingEntrance() {
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    t.c_lflag &= ~ICANON;
+    t.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
+
+void menu:: restoreEntrace() {
+    struct termios t;
+    tcgetattr(STDIN_FILENO, &t);
+    t.c_lflag |= ICANON;
+    t.c_lflag |= ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
+
+void menu:: printMenu(vector<string> options, int size, int select) {
+    system("clear");  // Limpa a tela (Linux)
     cout << "__________________________________________\n";
     cout << "|                MainMenu                |\n";
     cout << "|        Choose one of the options       |\n";
     cout << "|________________________________________|\n";
-    cout << "|      1. STUDENTS:                      |\n";
-    cout << "|      2. SCHEDULE:                      |\n";
-    cout << "|      3. REGISTERED STUDENTS:           |\n";
-    cout << "|      4. REQUEST:                       |\n";
-    cout << "|      \033[30m5. SAVE AND QUIT:\033[0m                 |\n";
-    cout << "|      \033[31m6. QUIT WITHOUT SAVING:\033[0m           |\n";
-    cout << "|________________________________________|\n";
-    cout << "Your option:";
-    cin >> op;
-    switch(op) {
-        case 1: {
-            //menu_Airport();
-            cout << "iiiiii" << endl;
-            break;
+    for (int i = 0; i < size; ++i) {
+        if (i == select) {
+            cout << "      \033[1;31m> " << options[i] << " <\033[0m" << endl;  // Set text to red
+        } else {
+            cout << "       " << options[i] << " " << endl;
         }
-
-        default:
-            cout << "piiiiiiii" << endl;
     }
+    cout << "|________________________________________|\n";
+}
+
+
+void menu::mainMenu(){
+    int size = 4, select = 0;
+    vector <string> options = {"Statistics ", "Airports ", "Coisa ", "QUIT "};
+    nonBlockingEntrance();
+    char keyStroke;
+    do{
+        printMenu(options, size, select);
+        keyStroke = getchar();
+        switch (keyStroke){
+            case '\033':  // Tecla de escape, indica que uma sequência de controle está chegando
+                getchar();  // Descarta o '[' que segue a tecla de escape
+                switch (getchar()) {  // Lê a tecla real
+                    case 'A':  // Tecla para cima
+                        select = (select - 1 + size) % size;
+                        break;
+                    case 'B':  // Tecla para baixo
+                        select = (select + 1) % size;
+                        break;
+                }
+                break;
+        }
+        //usleep(100000);  // Adiciona pequeno atraso
+    }while (keyStroke != '\n');  // Enter pressionado
+
+    restoreEntrace();
+    switch (select){
+        case 0:
+            menuStatistics();
+            break;
+        case 1:
+            cout << " OMG OPÇÃO 2" << endl;
+            break;
+        case 2:
+            cout << "wayayayayyayay" << endl;
+            break;
+        case 3:
+            cout << "GOOD BYE ;)" << endl;
+    }
+
+}
+
+void menu::menuStatistics() {
+    cout << "Entraste-te no Menu ESTATISTICAS !!" << endl;
+
 }
