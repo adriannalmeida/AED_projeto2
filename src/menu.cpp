@@ -8,7 +8,7 @@ void menu::run(){
     //    }
     //}
 
-    DataParser data = DataParser("../dataset");
+    DataParser data = DataParser("dataset");
     data.read();
     Graph g = data.getTravels();
     for (auto x: g.getVertexSet()){
@@ -34,7 +34,7 @@ void menu:: restoreEntrace() {
 }
 
 void menu:: printMenu(vector<string> options, int size, int select) {
-    system("clear");  // Limpa a tela (Linux)
+    //system("clear");  // Limpa a tela (Linux)
     cout << "__________________________________________\n";
     cout << "|                MainMenu                |\n";
     cout << "|        Choose one of the options       |\n";
