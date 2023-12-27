@@ -1,12 +1,18 @@
 #include "menu.h"
 menu:: menu(){}
 void menu::run(){
-    DataParser* dataPtr = new DataParser("../dataset");
-    DataParser data = *dataPtr;
-    for(auto i : data.getTravels().getVertexSet()){
-        for (auto u : i->getAdj()){
-            cout << u.getAirline().getName();
-        }
+
+    //for(auto i : data.getTravels().getVertexSet()){
+    //    for (auto u : i->getAdj()){
+    //        cout << u.getAirline().getName();
+    //    }
+    //}
+
+    DataParser data = DataParser("../dataset");
+    data.read();
+    Graph g = data.getTravels();
+    for (auto x: g.getVertexSet()){
+        cout << x->getInfo().getName() << endl;
     }
     mainMenu();
 }

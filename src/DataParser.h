@@ -1,7 +1,3 @@
-//
-// Created by eloy_mm2004 on 25-12-2023.
-//
-
 #ifndef INC_2PROJETO_DATAPARSER_H
 #define INC_2PROJETO_DATAPARSER_H
 
@@ -21,19 +17,22 @@ class DataParser {
     map<string, Airline *> airlines;
     map<string, Airport*> airports;
 
-    void readAirlines();
+
     /**
      * @brief This function reads the airports.csv file
      */
-    void readAirports();
+
     /**
      * @brief This function reads the flights.csv file
      */
-    void readFlights();
+
 public:
 
-    explicit DataParser(std::string path);
-
+    DataParser(std::string path);
+    void read();
+    void readAirports();
+    void readAirlines();
+    void readFlights();
     Vertex<Airport> getAirport();
 
     Edge<Flights> getFlightsGraph();
