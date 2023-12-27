@@ -162,8 +162,8 @@ void menu:: menuAirportStatistics(){
 
 }
 void menu :: menuFlightStatistics(){
-    int size = 5, select = 0;
-    vector <string> options = {"Total Flights", "Flights Per City", "Flights per Airline" ,"Flights from City X","Go back"};
+    int size = 6, select = 0;
+    vector <string> options = {"Total Flights", "Flights per City", "Flights per Airline", "Flights per City and Airline" ,"Flights from City X","Go back"};
     nonBlockingEntrance();
     auxprintMenu(options,size,select);
     restoreEntrace();
@@ -173,18 +173,35 @@ void menu :: menuFlightStatistics(){
             wait();
             break;
         case 1:
-            cout << "not implemented" <<  endl;
+            {string city;
+            cin >> city;
+            int count = NumberofFlightspercity(city);
+            cout  << count << endl;
             wait();
-            break;
+            break;}
         case 2:
-            cout << "not implemented" <<  endl;
+            {string air;
+            cin >> air;
+            int count = NumberofFlightspercity(air);
+            cout  << count << endl;
             wait();
-            break;
+            break;}
         case 3:
+            {string city;
+            string air;
+            cout << "City:" << endl;
+            cin >> city;
+            cout << "Airline:" << endl;
+            cin >> air;
+            int count = NumberofFlightsperCityandAir(city, air);
+            cout  << count << endl;
+            wait();
+            break;}
+        case 4:
             cout << "not implemented" <<  endl;
             wait();
             break;
-        case 4:
+        case 5:
             menuStatistics();
             break;
     }
@@ -244,4 +261,52 @@ void menu::wait() {
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     mainMenu();
     // Chama o mainMenu() após pressionar Enter
+}
+
+int menu::NumberofFlightspercity(string city) {
+    int count = 0;
+    for(auto i : Travels.getVertexSet()){
+        if(i->getInfo().getCountry().getCity() == city) {
+            for (auto u: i->getAdj()) {
+                count++;
+            }
+        }
+        for (auto u: i->getAdj()) {
+            if (u.getDest()->getInfo().getCountry().getCity() == city) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+int menu::NumberofFlightsperairline(string air) {
+    int count = 0;
+    for(auto i : Travels.getVertexSet()){
+        for (auto u: i->getAdj()) {
+            if (u.getAirline().getCode() == air) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+int menu::NumberofFlightsperCityandAir(string city, string air){
+    int count = 0;
+    for(auto i : Travels.getVertexSet()){
+        if(i->getInfo().getCountry().getCity() == city) {
+            for (auto u: i->getAdj()) {
+                if (u.getAirline().getCode() == air) {
+                    count++;
+                }
+            }
+        }
+        for (auto u: i->getAdj()) {
+            if (u.getDest()->getInfo().getCountry().getCity() == city && u.getAirline().getCode() == air) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
