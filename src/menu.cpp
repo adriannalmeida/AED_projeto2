@@ -182,7 +182,7 @@ void menu :: menuFlightStatistics(){
         case 2:
             {string air;
             cin >> air;
-            int count = NumberofFlightspercity(air);
+            int count = NumberofFlightsperairline(air);
             cout  << count << endl;
             wait();
             break;}
