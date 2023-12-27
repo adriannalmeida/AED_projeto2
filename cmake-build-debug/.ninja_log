@@ -1,0 +1,11 @@
+# ninja log v5
+1	477	1703700465301809823	CMakeFiles/2Projeto.dir/src/Airport.cpp.o	48889ec60e4b463f
+1	563	1703700465385810406	CMakeFiles/2Projeto.dir/src/Coordinates.cpp.o	f28ebeb22a58e896
+1	566	1703700465389810433	CMakeFiles/2Projeto.dir/src/Flights.cpp.o	7913d0b2c99e4184
+1	567	1703700465389810433	CMakeFiles/2Projeto.dir/src/Country.cpp.o	1dc6aebb5ee465d6
+478	850	1703700465673812402	CMakeFiles/2Projeto.dir/src/Airline.cpp.o	e1ef7cb504f93db1
+0	858	1703700465681812458	CMakeFiles/2Projeto.dir/main.cpp.o	936a296003080c95
+1	1029	1703700465853813648	CMakeFiles/2Projeto.dir/src/menu.cpp.o	c2190da2a50ea683
+563	1589	1703700466413817525	CMakeFiles/2Projeto.dir/src/DataParser.cpp.o	9e70a3bbe8e1cee8
+0	782	1703700480401913474	CMakeFiles/2Projeto.dir/src/menu.cpp.o	c2190da2a50ea683
+783	860	1703700480481914016	2Projeto	dac1712d24e3624d
