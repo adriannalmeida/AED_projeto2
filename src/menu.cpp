@@ -86,6 +86,7 @@ void menu::mainMenu(){
             break;
         case 3:
             cout << "GOOD BYE ;)" << endl;
+            return;
     }
 }
 
@@ -101,7 +102,7 @@ void menu::menuStatistics() {
             wait();
             break;
         case 1:
-            //menuFlightStatistics();
+            menuFlightStatistics();
             wait();
             break;
         case 2:
@@ -109,7 +110,7 @@ void menu::menuStatistics() {
             break;
         case 3:
             cout << "GOOD BYE ;)" << endl;
-            break;
+            return;
     }
 
 }
@@ -161,6 +162,32 @@ void menu:: menuAirportStatistics(){
 
 }
 void menu :: menuFlightStatistics(){
+    int size = 5, select = 0;
+    vector <string> options = {"Total Flights", "Flights Per City", "Flights per Airline" ,"Flights from City X","Go back"};
+    nonBlockingEntrance();
+    auxprintMenu(options,size,select);
+    restoreEntrace();
+    switch (select){
+        case 0:
+            NumberofFlights();
+            wait();
+            break;
+        case 1:
+            cout << "not implemented" <<  endl;
+            wait();
+            break;
+        case 2:
+            cout << "not implemented" <<  endl;
+            wait();
+            break;
+        case 3:
+            cout << "not implemented" <<  endl;
+            wait();
+            break;
+        case 4:
+            menuStatistics();
+            break;
+    }
 
 }
 int menu::NumberofAirports() {
