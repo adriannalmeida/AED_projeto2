@@ -16,15 +16,21 @@ class menu {
     menu();
     void run();
     void mainMenu();
+    void menuStatistics();
+    void menuAirportStatistics();
+    void menuFlightStatistics();
     void menuAirports();
     void wait();
     int NumberofAirports();
     int NumberofFlights();
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
-    void menuStatistics();
     void printMenu(vector<string> options, int size, int select);
+    void auxprintMenu(vector<string> options, int & size, int &select);
     void nonBlockingEntrance();
     void restoreEntrace();
+    int NumberofFlightspercity(string city);
+    int NumberofFlightsperairline(string air);
+    int NumberofFlightsperCityandAir(string city, string air);
 };
 
 
