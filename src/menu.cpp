@@ -7,9 +7,6 @@ void menu::run(){
     this->Travels = data.getTravels();
     this->airlines = data.getAirlines();
     this->airports = data.getAirports();
-    /*for (auto x: Travels.getVertexSet()){
-        cout << x->getInfo().getName() << endl;
-    }*/
     mainMenu();
 }
 
@@ -75,11 +72,11 @@ void menu::mainMenu(){
     switch (select){
         case 0:
             menuStatistics();
-            wait();
+           // wait();
             break;
         case 1:
             //menuAirports();
-            wait();
+             wait();
             break;
         case 2:
             cout << "wayayayayyayay" << endl;
@@ -99,11 +96,11 @@ void menu::menuStatistics() {
     switch (select){
         case 0:
             menuAirportStatistics();
-            wait();
+            //wait();
             break;
         case 1:
             menuFlightStatistics();
-            wait();
+            //wait();
             break;
         case 2:
             mainMenu();
@@ -182,7 +179,7 @@ void menu :: menuFlightStatistics(){
         case 2:
             {string air;
             cin >> air;
-            int count = NumberofFlightspercity(air);
+            int count = NumberofFlightsperairline(air);
             cout  << count << endl;
             wait();
             break;}
