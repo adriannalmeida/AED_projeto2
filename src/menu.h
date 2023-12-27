@@ -28,6 +28,9 @@ class menu {
     void auxprintMenu(vector<string> options, int & size, int &select);
     void nonBlockingEntrance();
     void restoreEntrace();
+    int NumberofFlightspercity(string city);
+    int NumberofFlightsperairline(string air);
+    int NumberofFlightsperCityandAir(string city, string air);
 };
 
 
