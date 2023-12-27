@@ -8,7 +8,7 @@ void menu::run(){
     //    }
     //}
 
-    DataParser data = DataParser("/home/eloy_mm2004/Desktop/AED_projeto2/src/dataset");
+    DataParser data = DataParser("dataset");
     data.read();
     this->Travels = data.getTravels();
     this->airlines = data.getAirlines();
