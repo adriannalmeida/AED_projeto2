@@ -1,3 +1,4 @@
+#include <limits>
 #include "menu.h"
 menu:: menu(){}
 void menu::run(){
@@ -8,14 +9,14 @@ void menu::run(){
     //    }
     //}
 
-    DataParser data = DataParser("/home/eloy_mm2004/Desktop/AED_projeto2/src/dataset");
+    DataParser data = DataParser("dataset");
     data.read();
     this->Travels = data.getTravels();
     this->airlines = data.getAirlines();
     this->airports = data.getAirports();
-    for (auto x: Travels.getVertexSet()){
+    /*for (auto x: Travels.getVertexSet()){
         cout << x->getInfo().getName() << endl;
-    }
+    }*/
     mainMenu();
 }
 
@@ -79,10 +80,12 @@ void menu::mainMenu(){
     restoreEntrace();
     switch (select){
         case 0:
-            menuAirports();
+            menuStatistics();
+            wait();
             break;
         case 1:
-            menuStatistics();
+            menuAirports();
+            wait();
             break;
         case 2:
             cout << "wayayayayyayay" << endl;
@@ -99,7 +102,7 @@ void menu::menuStatistics() {
 }
 void menu:: menuAirports(){
     int size = 4, select = 0;
-    vector <string> options = {"NumberofAirports/Flights", "Functions2", "Functions3", "QUIT "};
+    vector <string> options = {"NumberofAirports/Flights", "Flightsout", "Functions3", "QUIT "};
     char keyStroke;
     nonBlockingEntrance();
     do{
@@ -134,7 +137,7 @@ void menu:: menuAirports(){
             int airlines;
             int u = FlightsoutofAirport(*a,airlines);
             cout << "O Aeroporto de Lisboa tem " << u << " voos e " << airlines << " companhias aereas" << endl;
-            cout<< "Entraste no Menu AIRPORTS 2 !!" << endl;
+            //wait();
             break;}
         case 2:
             cout << "Entraste no Menu Functions3" << endl;
@@ -173,8 +176,9 @@ int menu::FlightsoutofAirport(Airport& Flightsout, int& airlines) {
                 count++;
                 if(airlineslist.empty()){
                     airlineslist.push_back(u.getAirline().getCode());
+                    airlines++;
                 }
-                int a = airlineslist.size();
+                /*int a = airlineslist.size();
                 for (auto k = 0; k<a;k++) {
                     if (airlineslist[k] == u.getAirline().getCode()) {
                         continue;
@@ -183,10 +187,17 @@ int menu::FlightsoutofAirport(Airport& Flightsout, int& airlines) {
                         airlines++;
                     }
 
-                }
+                }*/
 
             }
         }
     }
     return count;
+}
+void menu::wait() {
+    cout << "Press ENTER to continue...";
+    cin.get();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    mainMenu();
+    // Chama o mainMenu() após pressionar Enter
 }

@@ -17,6 +17,7 @@ class menu {
     void run();
     void mainMenu();
     void menuAirports();
+    void wait();
     int NumberofAirports();
     int NumberofFlights();
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
