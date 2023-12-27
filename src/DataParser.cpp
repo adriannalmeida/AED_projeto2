@@ -112,9 +112,15 @@ void DataParser:: read(){
     readAirports();
     readAirlines();
     readFlights();
-    cout << "HELP" << endl;
+    //cout << "HELP" << endl;
 
 }
 Graph<Airport> DataParser::getTravels() {
     return Travels;
+}
+unordered_map<string, Airline *> DataParser::getAirlines() {
+    return airlines;
+}
+unordered_map<string, Airport*> DataParser::getAirports() {
+    return airports;
 }

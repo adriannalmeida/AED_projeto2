@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <unordered_map>
 #include <map>
 #include "Graph.h"
 #include "Airport.h"
@@ -14,8 +15,8 @@
 class DataParser {
     Graph<Airport> Travels;
     std::string path;
-    map<string, Airline *> airlines;
-    map<string, Airport*> airports;
+    unordered_map<string, Airline *> airlines;
+    unordered_map<string, Airport*> airports;
 
 
     /**
@@ -34,9 +35,10 @@ public:
     void readAirlines();
     void readFlights();
     Vertex<Airport> getAirport();
-
     Edge<Flights> getFlightsGraph();
     Graph<Airport> getTravels();
+    unordered_map<string, Airline *> getAirlines();
+    unordered_map<string, Airport*> getAirports();
 };
 
 
