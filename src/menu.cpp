@@ -171,7 +171,7 @@ void menu :: menuFlightStatistics(){
             break;
         case 1:
             {string city;
-            cin >> city;
+            getline(std::cin, city);
             int count = NumberofFlightspercity(city);
             cout  << count << endl;
             wait();
@@ -187,7 +187,7 @@ void menu :: menuFlightStatistics(){
             {string city;
             string air;
             cout << "City:" << endl;
-            cin >> city;
+            getline(std::cin, city);
             cout << "Airline:" << endl;
             cin >> air;
             int count = NumberofFlightsperCityandAir(city, air);
