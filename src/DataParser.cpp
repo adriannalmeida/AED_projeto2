@@ -112,7 +112,6 @@ void DataParser:: read(){
     readAirports();
     readAirlines();
     readFlights();
-    //cout << "HELP" << endl;
 
 }
 Graph<Airport> DataParser::getTravels() {
