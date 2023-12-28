@@ -22,6 +22,8 @@ class menu {
     void menuAirports();
     void wait();
     int NumberofAirports();
+    int DifferentFlightsto(Airport& airport);
+    void TopAirportsintrafficcapacity(int n);
     int NumberofFlights();
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
     void printMenu(vector<string> options, int size, int select);

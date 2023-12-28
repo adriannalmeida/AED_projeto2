@@ -134,9 +134,13 @@ void menu:: menuAirportStatistics(){
             wait();
             break;}
         case 2:
-            cout << "nº of countries ..."<< endl;
+        {
+            string cin1;
+            cin >> cin1;
+            int u = DifferentFlightsto(*airports[cin1]);
+            cout << "Nº of countries " << u << endl;
             wait();
-            break;
+            break;}
         case 3:
             cout << "No lay-over flights: " << endl;
             wait();
@@ -150,7 +154,9 @@ void menu:: menuAirportStatistics(){
             wait();
             break;
         case 6:
-            cout << "TOp airports in traffic capacity" << endl;
+            int cin1;
+            cin >> cin1;
+            TopAirportsintrafficcapacity(cin1);
             wait();
             break;
         case 7:
@@ -306,4 +312,38 @@ int menu::NumberofFlightsperCityandAir(string city, string air){
         }
     }
     return count;
+}
+int menu::DifferentFlightsto(Airport& airport){
+    int count = 0;
+    for(auto i : Travels.getVertexSet()){
+        for(auto u : i->getAdj()){
+            if(u.getDest()->getInfo().getCountry().getCity() == airport.getCountry().getCity()){
+                count++;
+            }
+        }
+    }
+    return count;
+}
+void menu::TopAirportsintrafficcapacity(int n) {
+    for(auto i : Travels.getVertexSet()){
+       i->setNum(0);
+    }
+    for(auto i: Travels.getVertexSet()){
+        for(auto u : i->getAdj()){
+            i->setNum(i->getNum()+1);
+            u.getDest()->setNum(u.getDest()->getNum()+1);
+        }
+    }
+    for(int k = 0; k<n; k++){
+        int max = 0;
+        Vertex<Airport>* aux;
+        for(auto i : Travels.getVertexSet()){
+            if(i->getNum() > max){
+                max = i->getNum();
+                aux = i;
+            }
+        }
+        cout << aux->getInfo().getCode() << " " << aux->getNum() << endl;
+        aux->setNum(0);
+    }
 }
