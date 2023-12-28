@@ -6,6 +6,7 @@
 #include <vector>
 #include <unistd.h>
 #include <termios.h>
+#include <algorithm>
 using namespace std;
 
 class menu {
@@ -19,7 +20,7 @@ class menu {
     void menuStatistics();
     void menuAirportStatistics();
     void menuFlightStatistics();
-    void menuAirports();
+    //void menuAirports();
     void wait();
     int NumberofAirports();
     int NumberofFlights();
@@ -31,6 +32,7 @@ class menu {
     int NumberofFlightspercity(string city);
     int NumberofFlightsperairline(string air);
     int NumberofFlightsperCityandAir(string city, string air);
+    void directFlights();
 };
 
 

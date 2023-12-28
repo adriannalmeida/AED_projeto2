@@ -139,6 +139,7 @@ void menu:: menuAirportStatistics(){
             break;
         case 3:
             cout << "No lay-over flights: " << endl;
+            directFlights();
             wait();
             break;
         case 4:
@@ -306,4 +307,69 @@ int menu::NumberofFlightsperCityandAir(string city, string air){
         }
     }
     return count;
+}
+
+void menu::directFlights() {
+    cout << "Enter the code of the Airport of interest: ";
+    string code;
+    cin >> code;
+    Airport *a = airports.find(code)->second;
+    cout << "Select one option:" << endl << "1- Search by nº of reachable countries " << endl;
+    cout << "2- Search by nº of reachable cities" << endl << "3- Search by nº of reachable airports" << endl;
+    int n = 0;
+    auto vertex = Travels.findVertex(*a);
+    vector<string> destCountries, destCities, destAirports;
+    for (auto x: vertex->getAdj()) {
+        auto adest = x.getDest()->getInfo();
+        auto city = find(destCities.begin(), destCities.end(), adest.getCountry().getCity());
+        if (city == destCities.end())
+            destCities.push_back(adest.getCountry().getCity());
+        auto country = find(destCountries.begin(), destCountries.end(), adest.getCountry().getCountryName());
+        if (country == destCountries.end())
+            destCountries.push_back(adest.getCountry().getCountryName());
+        auto airport = find(destAirports.begin(), destAirports.end(), adest.getCode());
+        if (airport == destAirports.end())
+            destAirports.push_back(adest.getName());
+    }
+    cin >> n;
+    switch (n) {
+        case 1: {
+            cout << "From " << a->getName() << " there are " << destCountries.size()
+                 << " reachable countries with direct flights" << endl;
+            cout << "Press L for access the full list of Countries" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto x: destCountries) {
+                    cout << x << endl;
+                }
+            }
+            break;
+        }
+        case 2: {
+            cout << "From " << a->getName() << " there are " << destCities.size() << " reachable Cities with direct flights" << endl;
+            cout << "Press L for access the full list of Cities" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto x: destCities) {
+                    cout << x << endl;
+                }
+            }
+            break;
+        }
+        case 3:
+            cout << "From " << a->getName() << " there are " << destAirports.size() << " reachable Airports with direct flights" << endl;
+            cout << "Press L for access the full list of Airports" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto y: destAirports) {
+                    cout << y << endl;
+                }
+            }
+    }
 }
