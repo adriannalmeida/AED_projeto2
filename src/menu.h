@@ -6,6 +6,7 @@
 #include <vector>
 #include <unistd.h>
 #include <termios.h>
+#include <unordered_set>
 using namespace std;
 
 class menu {

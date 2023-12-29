@@ -9,6 +9,7 @@
 #include <queue>
 #include <stack>
 #include <list>
+#include <unordered_set>
 #include "Airline.h"
 #include "Airport.h"
 
@@ -96,6 +97,7 @@ public:
     void setVertexSet(Vertex<T> * vertex);
     bool removeEdge(const T &sourc, const T &dest);
     vector<Vertex<T> * > getVertexSet() const;
+    void DFSAUXILIAR(Vertex<T>* vertex, unordered_set<Vertex<T>*>& aux);
     vector<T> dfs() const;
     vector<T> dfs(const T & source) const;
     vector<T> bfs(const T &source) const;
@@ -376,6 +378,21 @@ vector<T> Graph<T>::dfs(const T & source) const {
     return res;
 }
 
+
+/*************** DFSAUXILIAR ***************/
+
+template<class T>
+void Graph<T>::DFSAUXILIAR(Vertex<T>* vertex, unordered_set<Vertex<T>*>& aux) {
+    vertex->setVisited(true);
+
+    for (auto & e : vertex->adj) {
+        auto w = e.dest;
+        if (!w->isVisited()) {
+            aux.insert(w);
+            DFSAUXILIAR(w, aux);
+        }
+    }
+}
 
 /****************** BFS ********************/
 /*

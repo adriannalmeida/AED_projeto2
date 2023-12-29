@@ -237,27 +237,21 @@ int menu::FlightsoutofAirport(Airport& Flightsout, int& airlines) {
     int count = 0;
     auto aux = Travels.findVertex(Flightsout);
     airlines = 0;
-    vector<string> airlineslist;
-
-    for (auto i: Travels.getVertexSet()) {
+    std::unordered_set<string> uniqueAirlines;
+    for (auto i : Travels.getVertexSet()) {
         if (i->getInfo().getCode() == Flightsout.getCode()) {
-            for (auto u: i->getAdj()) {
+
+
+            for (auto u : i->getAdj()) {
                 count++;
-                if(airlineslist.empty()){
-                    airlineslist.push_back(u.getAirline().getCode());
+
+                // Use unordered_set's insert method to automatically handle uniqueness
+                auto result = uniqueAirlines.insert(u.getAirline().getCode());
+
+                // Check if the insertion took place (i.e., the airline code was unique)
+                if (result.second) {
                     airlines++;
                 }
-                /*int a = airlineslist.size();
-                for (auto k = 0; k<a;k++) {
-                    if (airlineslist[k] == u.getAirline().getCode()) {
-                        continue;
-                    } else {
-                        airlineslist.push_back(u.getAirline().getCode());
-                        airlines++;
-                    }
-
-                }*/
-
             }
         }
     }
@@ -353,24 +347,25 @@ void menu::TopAirportsintrafficcapacity(int n) {
     }
 }
 void menu::EssencialAirports(){
-    vector<Vertex<Airport>*> aux;
-    for(auto i: Travels.getVertexSet()){
+    unordered_set<Vertex<Airport>*> aux;
+
+    for (auto i : Travels.getVertexSet()) {
         i->setNum(0);
         i->setVisited(false);
     }
-    for(auto i : Travels.getVertexSet()){
-        auto k = Travels.bfs(i->getInfo());
-        for(auto u: k){
-            if(i->getInfo() == u){
-                continue;
-            }
-            if(std::find(aux.begin(), aux.end(),Travels.findVertex(u)) == aux.end()){
-                aux.push_back(Travels.findVertex(u));
-            }
+
+    cout << "Essential Airports: " << endl;
+
+    for (auto i : Travels.getVertexSet()) {
+        if (!i->isVisited()) {
+            Travels.DFSAUXILIAR(i, aux);
         }
     }
-    for(auto i : aux){
+
+    for (auto i : aux) {
         cout << i->getInfo().getCode() << endl;
     }
+
     cout << "Number of airports: " << aux.size() << endl;
+
 }
