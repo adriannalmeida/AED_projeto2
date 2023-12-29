@@ -1,5 +1,6 @@
 #include <limits>
 #include "menu.h"
+#include <algorithm>
 menu:: menu(){}
 void menu::run(){
     DataParser data = DataParser("dataset");
@@ -113,9 +114,9 @@ void menu::menuStatistics() {
 }
 
 void menu:: menuAirportStatistics(){
-    int size = 8, select = 0;
+    int size = 9, select = 0;
     vector <string> options = {"Total Nº of Airports", "Nº of Flights per Airport", "Nº of countries", "No lay-over flights",
-                               "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Go back"};
+                               "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Essential Airports", "Go back"};
     nonBlockingEntrance();
     auxprintMenu(options,size,select);
     restoreEntrace();
@@ -134,28 +135,87 @@ void menu:: menuAirportStatistics(){
             wait();
             break;}
         case 2:
-            cout << "nº of countries ..."<< endl;
+        {
+            string cin1;
+            cin >> cin1;
+            int u = DifferentFlightsto(*airports[cin1]);
+            cout << "Nº of countries " << u << endl;
             wait();
-            break;
+            break;}
         case 3:
             cout << "No lay-over flights: " << endl;
             directFlights();
             wait();
             break;
         case 4:
-            cout << "Max destinations with N lay-overs" << endl;
-            wait();
+            menuDestination();
             break;
         case 5:
-            cout << "função 7!~" << endl;
+            findMaxStopsTrip();
             wait();
             break;
         case 6:
-            cout << "TOp airports in traffic capacity" << endl;
+            int cin1;
+            cin >> cin1;
+            TopAirportsintrafficcapacity(cin1);
             wait();
             break;
         case 7:
+            EssencialAirports();
+            wait();
+            break;
+        case 8:
             menuStatistics();
+    }
+
+}
+void menu::menuDestination() {
+    int size = 4, select = 0;
+    vector <string> options = {"Number of Airports", "Number of Cities", "Number of Countries", "Go back"};
+    nonBlockingEntrance();
+    auxprintMenu(options,size,select);
+    restoreEntrace();
+    switch (select){
+        case 0:
+        {Graph<Airport> airportGraph;
+            string airport;
+            int stop;
+            cout << "Code of the starting airport:" << endl;
+            getline(cin, airport);
+            cout << "Number of lay-overs:" << endl;
+            cin >> stop;
+            int n = NumberofStopsairports(airport, stop, airportGraph);
+            cout << n << endl;
+            wait();
+            break;}
+        case 1:
+        {Graph<Airport> airportGraph;
+            unordered_set<string> visitedCities;
+            string airport;
+            int stop;
+            cout << "Code of the starting airport:" << endl;
+            getline(cin, airport);
+            cout << "Number of lay-overs:" << endl;
+            cin >> stop;
+            int n = NumberofStopscities(airport, stop, airportGraph, visitedCities);
+            cout << n << endl;
+            wait();
+            break;}
+        case 2:
+        {Graph<Airport> airportGraph;
+            unordered_set<string> visitedCountries;
+            string airport;
+            int stop;
+            cout << "Code of the starting airport:" << endl;
+            getline(cin, airport);
+            cout << "Number of lay-overs:" << endl;
+            cin >> stop;
+            int n = NumberofStopscountries(airport, stop, airportGraph, visitedCountries);
+            cout << n << endl;
+            wait();
+            break;}
+        case 3:
+            menuDestination();
     }
 
 }
@@ -172,7 +232,7 @@ void menu :: menuFlightStatistics(){
             break;
         case 1:
             {string city;
-            getline(std::cin, city);
+            getline(cin, city);
             int count = NumberofFlightspercity(city);
             cout  << count << endl;
             wait();
@@ -188,7 +248,7 @@ void menu :: menuFlightStatistics(){
             {string city;
             string air;
             cout << "City:" << endl;
-            getline(std::cin, city);
+            getline(cin, city);
             cout << "Airline:" << endl;
             cin >> air;
             int count = NumberofFlightsperCityandAir(city, air);
@@ -227,27 +287,21 @@ int menu::FlightsoutofAirport(Airport& Flightsout, int& airlines) {
     int count = 0;
     auto aux = Travels.findVertex(Flightsout);
     airlines = 0;
-    vector<string> airlineslist;
-
-    for (auto i: Travels.getVertexSet()) {
+    std::unordered_set<string> uniqueAirlines;
+    for (auto i : Travels.getVertexSet()) {
         if (i->getInfo().getCode() == Flightsout.getCode()) {
-            for (auto u: i->getAdj()) {
+
+
+            for (auto u : i->getAdj()) {
                 count++;
-                if(airlineslist.empty()){
-                    airlineslist.push_back(u.getAirline().getCode());
+
+                // Use unordered_set's insert method to automatically handle uniqueness
+                auto result = uniqueAirlines.insert(u.getAirline().getCode());
+
+                // Check if the insertion took place (i.e., the airline code was unique)
+                if (result.second) {
                     airlines++;
                 }
-                /*int a = airlineslist.size();
-                for (auto k = 0; k<a;k++) {
-                    if (airlineslist[k] == u.getAirline().getCode()) {
-                        continue;
-                    } else {
-                        airlineslist.push_back(u.getAirline().getCode());
-                        airlines++;
-                    }
-
-                }*/
-
             }
         }
     }
@@ -308,6 +362,7 @@ int menu::NumberofFlightsperCityandAir(string city, string air){
     }
     return count;
 }
+
 
 void menu::directFlights() {
     cout << "Enter the code of the Airport of interest: ";
@@ -373,3 +428,190 @@ void menu::directFlights() {
             }
     }
 }
+
+int menu::NumberofStopsairports(string airport, int stop, Graph<Airport>& airportGraph) {
+    int count = 0;
+    if (stop == 0) {
+        return 0;
+    }
+
+    for (auto i : Travels.getVertexSet()) {
+        if (i->getInfo().getCode() == airport) {
+            for (auto u : i->getAdj()) {
+                if(!airportGraph.findVertex(u.getDest()->getInfo())){
+                    count++;
+                    airportGraph.addVertex(u.getDest()->getInfo());
+                    count += NumberofStopsairports(u.getDest()->getInfo().getCode(), stop - 1, airportGraph);
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+int menu::NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities) {
+    int count = 0;
+    if (stop == 0) {
+        return 0;
+    }
+
+    for (auto i : Travels.getVertexSet()) {
+        if (i->getInfo().getCode() == airport) {
+            for (auto u : i->getAdj()) {
+                if(!airportGraph.findVertex(u.getDest()->getInfo())){
+                    count++;
+                    airportGraph.addVertex(u.getDest()->getInfo());
+                    count += NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
+                    if (visitedCities.find(u.getDest()->getInfo().getCountry().getCity()) != visitedCities.end()) {
+                        count--;
+                    }else{
+                        visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
+                    }
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries) {
+    int count = 0;
+    if (stop == 0) {
+        return 0;
+    }
+
+    for (auto i : Travels.getVertexSet()) {
+        if (i->getInfo().getCode() == airport) {
+            for (auto u : i->getAdj()) {
+                if(!airportGraph.findVertex(u.getDest()->getInfo())){
+                    count++;
+                    airportGraph.addVertex(u.getDest()->getInfo());
+                    count += NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
+                    if (visitedCountries.find(u.getDest()->getInfo().getCountry().getCountryName()) != visitedCountries.end()) {
+                        count--;
+                    }else{
+                        visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
+                    }
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+void menu::findMaxStopsTrip() {
+    int maxStops = 0;
+    vector<pair<string, string>> currentTrip;
+    set<pair<string, string>> printedTrips;
+    Graph<Airport> airportGraph;
+
+    unordered_set<string> visitedAirports;
+
+    for (auto u : Travels.getVertexSet()) {
+        if (!visitedAirports.count(u->getInfo().getCode())) {
+            visitedAirports.insert(u->getInfo().getCode());
+            findMaxStopsTripHelper(u, airportGraph, maxStops, currentTrip, printedTrips, visitedAirports);
+            visitedAirports.erase(u->getInfo().getCode());
+        }
+    }
+
+    cout << "Maximum stops trip(s):" << endl;
+    for (const auto &trip : printedTrips) {
+        cout << "From " << trip.first << " to " << trip.second << "/" << printedTrips.size() << endl;
+    }
+}
+
+void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph,
+                                  int &maxStops, vector<pair<string, string>> &currentTrip,
+                                  set<pair<string, string>> &printedTrips,
+                                  unordered_set<string> &visitedAirports) {
+    currentAirport->setVisited(true);
+
+    for (auto &edge : currentAirport->getAdj()) {
+        auto destAirport = edge.getDest();
+        if (!destAirport->isVisited() && currentAirport->getInfo().getCode() != destAirport->getInfo().getCode()) {
+            visitedAirports.insert(destAirport->getInfo().getCode());
+            currentTrip.push_back({currentAirport->getInfo().getCode(), destAirport->getInfo().getCode()});
+            cout << destAirport->getInfo().getCode();
+            findMaxStopsTripHelper(destAirport, airportGraph, maxStops, currentTrip, printedTrips, visitedAirports);
+
+            currentTrip.pop_back();
+            visitedAirports.erase(destAirport->getInfo().getCode());
+        }
+    }
+
+    currentAirport->setVisited(false);
+
+    if (currentTrip.size() == maxStops) {
+        pair<string, string> tripPair = {currentTrip.front().first, currentTrip.back().second};
+        if (printedTrips.find(tripPair) == printedTrips.end()) {
+            printedTrips.insert(tripPair);
+        }
+    } else if (currentTrip.size() > maxStops) {
+        maxStops = currentTrip.size();
+        printedTrips.clear();
+        printedTrips.insert({currentTrip.front().first, currentTrip.back().second});
+    }
+}
+
+int menu::DifferentFlightsto(Airport& airport){
+    int count = 0;
+    for(auto i : Travels.getVertexSet()){
+        for(auto u : i->getAdj()){
+            if(u.getDest()->getInfo().getCountry().getCity() == airport.getCountry().getCity()){
+                count++;
+            }
+        }
+    }
+    return count;
+}
+void menu::TopAirportsintrafficcapacity(int n) {
+    for(auto i : Travels.getVertexSet()){
+       i->setNum(0);
+    }
+    for(auto i: Travels.getVertexSet()){
+        for(auto u : i->getAdj()){
+            i->setNum(i->getNum()+1);
+            u.getDest()->setNum(u.getDest()->getNum()+1);
+        }
+    }
+    for(int k = 0; k<n; k++){
+        int max = 0;
+        Vertex<Airport>* aux;
+        for(auto i : Travels.getVertexSet()){
+            if(i->getNum() > max){
+                max = i->getNum();
+                aux = i;
+            }
+        }
+        cout << aux->getInfo().getCode() << " " << aux->getNum() << endl;
+        aux->setNum(0);
+    }
+}
+void menu::EssencialAirports(){
+    unordered_set<Vertex<Airport>*> aux;
+
+    for (auto i : Travels.getVertexSet()) {
+        i->setNum(0);
+        i->setVisited(false);
+    }
+
+    cout << "Essential Airports: " << endl;
+
+    for (auto i : Travels.getVertexSet()) {
+        if (!i->isVisited()) {
+            Travels.DFSAUXILIAR(i, aux);
+        }
+    }
+
+    for (auto i : aux) {
+        cout << i->getInfo().getCode() << endl;
+    }
+
+    cout << "Number of airports: " << aux.size() << endl;
+
+}
+
