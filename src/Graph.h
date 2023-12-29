@@ -36,6 +36,7 @@ class Vertex {
 public:
     Vertex(T in);
     T getInfo() const;
+    bool operator==(const Vertex<T>& other) const;
     void setInfo(T in);
     bool isVisited() const;
     void setVisited(bool v);
@@ -87,6 +88,7 @@ class Graph {
     bool dfsIsDAG(Vertex<T> *v) const;
 public:
     Vertex<T> *findVertex(const T &in) const;
+
     int getNumVertex() const;
     bool addVertex(const T &in);
     bool removeVertex(const T &in);
@@ -398,9 +400,11 @@ vector<T> Graph<T>::bfs(const T & source) const {
         res.push_back(v->info);
         for (auto & e : v->adj) {
             auto w = e.dest;
-            if ( ! w->visited ) {
+            if (!w->visited ) {
                 q.push(w);
                 w->visited = true;
+                w->indegree = w->indegree + 1;
+                v->num = v->num +1;
             }
         }
     }
@@ -426,6 +430,10 @@ vector<T> Graph<T>::topsort() const {
     vector<T> res;
 
     return res;
+}
+template<class T>
+bool Vertex<T>::operator==(const Vertex<T>& other) const {
+    return this->info == other.info;
 }
 
 #endif /* GRAPH_H_ */

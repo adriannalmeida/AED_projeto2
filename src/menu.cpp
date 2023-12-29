@@ -1,5 +1,6 @@
 #include <limits>
 #include "menu.h"
+#include <algorithm>
 menu:: menu(){}
 void menu::run(){
     DataParser data = DataParser("dataset");
@@ -113,9 +114,9 @@ void menu::menuStatistics() {
 }
 
 void menu:: menuAirportStatistics(){
-    int size = 8, select = 0;
+    int size = 9, select = 0;
     vector <string> options = {"Total Nº of Airports", "Nº of Flights per Airport", "Nº of countries", "No lay-over flights",
-                               "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Go back"};
+                               "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Essential Airports", "Go back"};
     nonBlockingEntrance();
     auxprintMenu(options,size,select);
     restoreEntrace();
@@ -160,6 +161,10 @@ void menu:: menuAirportStatistics(){
             wait();
             break;
         case 7:
+            EssencialAirports();
+            wait();
+            break;
+        case 8:
             menuStatistics();
     }
 
@@ -346,4 +351,26 @@ void menu::TopAirportsintrafficcapacity(int n) {
         cout << aux->getInfo().getCode() << " " << aux->getNum() << endl;
         aux->setNum(0);
     }
+}
+void menu::EssencialAirports(){
+    vector<Vertex<Airport>*> aux;
+    for(auto i: Travels.getVertexSet()){
+        i->setNum(0);
+        i->setVisited(false);
+    }
+    for(auto i : Travels.getVertexSet()){
+        auto k = Travels.bfs(i->getInfo());
+        for(auto u: k){
+            if(i->getInfo() == u){
+                continue;
+            }
+            if(std::find(aux.begin(), aux.end(),Travels.findVertex(u)) == aux.end()){
+                aux.push_back(Travels.findVertex(u));
+            }
+        }
+    }
+    for(auto i : aux){
+        cout << i->getInfo().getCode() << endl;
+    }
+    cout << "Number of airports: " << aux.size() << endl;
 }

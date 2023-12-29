@@ -15,12 +15,13 @@ class menu {
     public:
     menu();
     void run();
+    void wait();
     void mainMenu();
     void menuStatistics();
     void menuAirportStatistics();
     void menuFlightStatistics();
     void menuAirports();
-    void wait();
+    void EssencialAirports();
     int NumberofAirports();
     int DifferentFlightsto(Airport& airport);
     void TopAirportsintrafficcapacity(int n);
