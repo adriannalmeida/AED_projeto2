@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <unistd.h>
 #include <termios.h>
+#include <unordered_set>
 using namespace std;
 
 class menu {
@@ -17,14 +18,17 @@ class menu {
     public:
     menu();
     void run();
+    void wait();
     void mainMenu();
     void menuStatistics();
     void menuAirportStatistics();
     void menuDestination();
     void menuFlightStatistics();
     void menuAirports();
-    void wait();
+    void EssencialAirports();
     int NumberofAirports();
+    int DifferentFlightsto(Airport& airport);
+    void TopAirportsintrafficcapacity(int n);
     int NumberofFlights();
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
     void printMenu(vector<string> options, int size, int select);
