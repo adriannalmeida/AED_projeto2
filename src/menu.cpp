@@ -506,14 +506,12 @@ void menu::findMaxStopsTrip() {
     int maxStops = 0;
     vector<pair<string, string>> currentTrip;
     set<pair<string, string>> printedTrips;
-    Graph<Airport> airportGraph;
-
     unordered_set<string> visitedAirports;
 
     for (auto u : Travels.getVertexSet()) {
         if (!visitedAirports.count(u->getInfo().getCode())) {
             visitedAirports.insert(u->getInfo().getCode());
-            findMaxStopsTripHelper(u, airportGraph, maxStops, currentTrip, printedTrips, visitedAirports);
+            findMaxStopsTripHelper(u, maxStops, currentTrip, printedTrips, visitedAirports);
             visitedAirports.erase(u->getInfo().getCode());
         }
     }
@@ -524,7 +522,7 @@ void menu::findMaxStopsTrip() {
     }
 }
 
-void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph,
+void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport,
                                   int &maxStops, vector<pair<string, string>> &currentTrip,
                                   set<pair<string, string>> &printedTrips,
                                   unordered_set<string> &visitedAirports) {
@@ -536,7 +534,7 @@ void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport
             visitedAirports.insert(destAirport->getInfo().getCode());
             currentTrip.push_back({currentAirport->getInfo().getCode(), destAirport->getInfo().getCode()});
             cout << destAirport->getInfo().getCode();
-            findMaxStopsTripHelper(destAirport, airportGraph, maxStops, currentTrip, printedTrips, visitedAirports);
+            findMaxStopsTripHelper(destAirport, maxStops, currentTrip, printedTrips, visitedAirports);
 
             currentTrip.pop_back();
             visitedAirports.erase(destAirport->getInfo().getCode());
@@ -558,15 +556,17 @@ void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport
 }
 
 int menu::DifferentFlightsto(Airport& airport){
-    int count = 0;
+    unordered_set<string> visitedCountries;
     for(auto i : Travels.getVertexSet()){
-        for(auto u : i->getAdj()){
-            if(u.getDest()->getInfo().getCountry().getCity() == airport.getCountry().getCity()){
-                count++;
+        if(i->getInfo() == airport) {
+            for (auto u: i->getAdj()) {
+                if (!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())) {
+                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
+                }
             }
         }
     }
-    return count;
+    return visitedCountries.size();
 }
 void menu::TopAirportsintrafficcapacity(int n) {
     for(auto i : Travels.getVertexSet()){
