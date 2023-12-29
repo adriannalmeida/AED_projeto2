@@ -4,6 +4,8 @@
 #include <iostream>
 #include "DataParser.h"
 #include <vector>
+#include <set>
+#include <unordered_set>
 #include <unistd.h>
 #include <termios.h>
 #include <unordered_set>
@@ -20,6 +22,7 @@ class menu {
     void mainMenu();
     void menuStatistics();
     void menuAirportStatistics();
+    void menuDestination();
     void menuFlightStatistics();
     void menuAirports();
     void EssencialAirports();
@@ -35,6 +38,11 @@ class menu {
     int NumberofFlightspercity(string city);
     int NumberofFlightsperairline(string air);
     int NumberofFlightsperCityandAir(string city, string air);
+    int NumberofStopsairports(string airport, int stop, Graph<Airport>& airportGraph);
+    int NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities);
+    int NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries);
+    void findMaxStopsTrip();
+    void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
 };
 
 
