@@ -8,12 +8,12 @@ Flights::Flights (std::string src, std::string dest, Airline airline) {
     this->dest = dest;
 }
 
-string Flights:: getsrc(){
+string Flights:: getsrc() const {
     return this->src;
 }
-string Flights:: getdest(){
+string Flights:: getdest() const {
     return this-> dest;
 }
-Airline Flights:: getAirline(){
+Airline Flights:: getAirline() const {
     return this->airline;
 }
