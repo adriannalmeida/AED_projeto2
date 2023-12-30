@@ -5,11 +5,12 @@
 #include "DataParser.h"
 #include <vector>
 #include <set>
-#include <unordered_set>
+#include <unordered_map>
 #include <unistd.h>
 #include <termios.h>
 #include <algorithm>
 #include <unordered_set>
+#include <cctype>
 using namespace std;
 
 class menu {
@@ -25,7 +26,6 @@ class menu {
     void menuAirportStatistics();
     void menuDestination();
     void menuFlightStatistics();
-    void wait();
     void EssencialAirports();
     int NumberofAirports();
     int DifferentFlightsto(Airport& airport);
@@ -44,7 +44,11 @@ class menu {
     int NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities);
     int NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries);
     void findMaxStopsTrip();
-    void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+    void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+    vector<Airport> articulationPoints() const;
+    void aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
+    //void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+
 };
 
 
