@@ -47,6 +47,8 @@ class menu {
     void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
     vector<Airport> articulationPoints() const;
     void aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
+    //void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+
 };
 
 
