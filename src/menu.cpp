@@ -122,16 +122,17 @@ void menu:: menuAirportStatistics(){
     restoreEntrace();
     switch (select){
         case 0:
-            NumberofAirports();
+            std::cout << "The total number of airports in this network is \033[1;31m> " << NumberofAirports() << " <\033[0m" << std::endl;
             wait();
             break;
-        case 1:
-        {string cin1;
-            cin >> cin1;
-            auto a = airports[cin1];
+        case 1:{
+            cout << "Enter the code of the Airport to look up: ";
+            string code;
+            cin >> code;
+            auto a = airports[code];
             int airlines;
             int u = FlightsoutofAirport(*a,airlines);
-            cout << "O Aeroporto de Lisboa tem " << u << " voos e " << airlines << " companhias aereas" << endl;
+            cout << airports[code]->getName() << "has " << u << " possible flights and works with " << airlines << " airlines" << endl;
             wait();
             break;}
         case 2:
@@ -160,10 +161,15 @@ void menu:: menuAirportStatistics(){
             TopAirportsintrafficcapacity(cin1);
             wait();
             break;
-        case 7:
-            EssencialAirports();
+        case 7:{
+            auto x = articulationPoints();
+            cout << "In this network " << x.size() << " airports are essential" << endl;
+            cout << "Do you want a full list on the essential Airports?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes") for(auto y: x) cout << y.getName() << endl;
             wait();
-            break;
+            break;}
         case 8:
             menuStatistics();
     }
@@ -270,7 +276,6 @@ int menu::NumberofAirports() {
     for(auto i : Travels.getVertexSet()){
         count++;
     }
-    cout << count << endl;
     return count;
 }
 int menu::NumberofFlights() {
@@ -612,6 +617,49 @@ void menu::EssencialAirports(){
     }
 
     cout << "Number of airports: " << aux.size() << endl;
+
+}
+
+
+
+vector<Airport> menu::articulationPoints() const {
+    vector<Airport> articulation;
+    for (auto v : Travels.getVertexSet()){
+        v->setProcessing(false);
+        v->setLow(0);
+        v->setNum(0);
+    }
+    int dTime = 1;
+    for (auto v : Travels.getVertexSet())
+        if (! v->isVisited()){
+            aux(v, articulation, dTime);
+        }
+    return articulation;
+}
+
+void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
+    v->setNum(dTime);
+    v->setLow(dTime);
+    v->setProcessing(true);
+    int tree = 0;
+    for (auto w: v->getAdj()){
+        if(w.getDest()->getNum() == 0){
+            tree++;
+            aux(w.getDest(), articulation, dTime +1);
+            v->setLow(min(v->getLow(), w.getDest()->getLow()));
+            if((w.getDest()->getLow() >= v->getNum() and v->getNum()!= 1) or (v->getNum() == 1 and tree > 1)){
+                auto it = find(articulation.begin(), articulation.end(), v->getInfo());
+                if (it == articulation.end()) {
+                    articulation.push_back(v->getInfo());
+                }
+            }
+        }
+        else if( v->isProcessing()){
+            v->setLow(min(v->getLow(), w.getDest()->getNum()));
+        }
+    }
+    v->setProcessing(false);
+
 
 }
 
