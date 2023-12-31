@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <unordered_set>
 #include <cctype>
+#include <iomanip>
 using namespace std;
 
 class menu {
@@ -28,12 +29,12 @@ class menu {
     void menuFlightStatistics();
     void EssencialAirports();
     int NumberofAirports();
-    int DifferentFlightsto(Airport& airport);
+    set<string> DifferentFlightsto(Airport& airport);
     void TopAirportsintrafficcapacity(int n);
     int NumberofFlights();
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
-    void printMenu(vector<string> options, int size, int select);
-    void auxprintMenu(vector<string> options, int & size, int &select);
+    void printMenu(vector<string> options, int size, int select, string menuName);
+    void auxprintMenu(vector<string> options, int & size, int &select, string menuName);
     void nonBlockingEntrance();
     void restoreEntrace();
     int NumberofFlightspercity(string city);
@@ -44,10 +45,9 @@ class menu {
     int NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities);
     int NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries);
     void findMaxStopsTrip();
-    void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, Graph<Airport> &airportGraph, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
     vector<Airport> articulationPoints() const;
     void aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
-    //void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+    void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
 
 };
 
