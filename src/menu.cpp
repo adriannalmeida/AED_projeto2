@@ -136,8 +136,7 @@ void menu:: menuAirportStatistics(){
             break;
         case 1:{
             int f = 1; string code;
-            do{
-                cout << "Enter the code of the Airport of interest: ";
+            do{cout << "Enter the code of the Airport of interest: ";
                 cin >> code; f = 1;
                 auto it =airports.find(code);
                 if(it == airports.end()){
@@ -541,24 +540,51 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
 }
 
 void menu::findMaxStopsTrip() {
-    int maxStops = 0;
-    vector<pair<string, string>> currentTrip;
-    set<pair<string, string>> printedTrips;
-    unordered_set<string> visitedAirports;
-
-    for (auto u : Travels.getVertexSet()) {
-        if (!visitedAirports.count(u->getInfo().getCode())) {
-            visitedAirports.insert(u->getInfo().getCode());
-            findMaxStopsTripHelper(u, maxStops, currentTrip, printedTrips, visitedAirports);
-            visitedAirports.erase(u->getInfo().getCode());
+    int f = 1, maxStops = 0, temp = 0;
+    string code;
+    do {
+        cout << "Enter the code of the Airport of interest: ";
+        cin >> code;
+        f = 1;
+        auto it = airports.find(code);
+        if (it == airports.end()) {
+            f = 0;
+            cout << "Invalid code" << endl;
         }
-    }
+    } while (f == 0);
 
-    cout << "Maximum stops trip(s):" << endl;
-    for (const auto &trip : printedTrips) {
-        cout << "From " << trip.first << " to " << trip.second << "/" << printedTrips.size() << endl;
+    vector<string> airportsCode;
+    auto a1 = Travels.findVertex(*airports[code]);
+    queue<Vertex<Airport> *> q;
+    for (auto v : Travels.getVertexSet())
+        v->setVisited(false);
+    q.push(a1);
+    a1->setVisited(true);
+    int level = 0;
+    while (!q.empty()) {
+        int size = q.size();
+        for (int x = 0; x < size; x++){
+            auto v = q.front();
+            q.pop();
+            for (auto & e : v->getAdj()) {
+                auto w = e.getDest();
+                if (! w->isVisited()) {
+                    q.push(w);
+                    w->setVisited(true);
+                    //airportsCode.push_back(v->getInfo().getCode());
+                }
+            }
+        }level++;
     }
+    cout << "NOTE:" << endl;
+    cout << "This option calculates the fastest way to get to the airport that requires teh biggest number of stops to get there" << endl <<
+    " however have in mind that this calculates the best path and not a path with loops as it would useless to repeat airports" << endl <<
+    " or travel to two airports when one might be enough to reach the final destination" << endl;
+    cout << endl << "From " << airports[code]->getName() << " the trip with most stops passes through \033[1;31m" << level << "\033[0m airports " << endl;
+
 }
+
+
 
 void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport,
                                   int &maxStops, vector<pair<string, string>> &currentTrip,
@@ -627,31 +653,6 @@ void menu::TopAirportsintrafficcapacity(int n) {
         aux->setNum(0);
     }
 }
-void menu::EssencialAirports(){
-    unordered_set<Vertex<Airport>*> aux;
-
-    for (auto i : Travels.getVertexSet()) {
-        i->setNum(0);
-        i->setVisited(false);
-    }
-
-    cout << "Essential Airports: " << endl;
-
-    for (auto i : Travels.getVertexSet()) {
-        if (!i->isVisited()) {
-            Travels.DFSAUXILIAR(i, aux);
-        }
-    }
-
-    for (auto i : aux) {
-        cout << i->getInfo().getCode() << endl;
-    }
-
-    cout << "Number of airports: " << aux.size() << endl;
-
-}
-
-
 
 vector<Airport> menu::articulationPoints() const {
     vector<Airport> articulation;
@@ -663,12 +664,12 @@ vector<Airport> menu::articulationPoints() const {
     int dTime = 1;
     for (auto v : Travels.getVertexSet())
         if (! v->isVisited()){
-            aux(v, articulation, dTime);
+            auxArticulationPoints(v, articulation, dTime);
         }
     return articulation;
 }
 
-void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
+void menu::auxArticulationPoints(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
     v->setNum(dTime);
     v->setLow(dTime);
     v->setProcessing(true);
@@ -676,7 +677,7 @@ void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) con
     for (auto w: v->getAdj()){
         if(w.getDest()->getNum() == 0){
             tree++;
-            aux(w.getDest(), articulation, dTime +1);
+            auxArticulationPoints(w.getDest(), articulation, dTime +1);
             v->setLow(min(v->getLow(), w.getDest()->getLow()));
             if((w.getDest()->getLow() >= v->getNum() and v->getNum()!= 1) or (v->getNum() == 1 and tree > 1)){
                 auto it = find(articulation.begin(), articulation.end(), v->getInfo());
