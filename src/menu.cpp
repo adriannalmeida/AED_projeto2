@@ -480,7 +480,6 @@ int menu::NumberofStopsairports(string airport, int stop, Graph<Airport>& airpor
 }
 
 int menu::NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities) {
-    int count = 0;
     if (stop == 0) {
         return 0;
     }
@@ -488,25 +487,19 @@ int menu::NumberofStopscities(string airport, int stop, Graph<Airport>& airportG
     for (auto i : Travels.getVertexSet()) {
         if (i->getInfo().getCode() == airport) {
             for (auto u : i->getAdj()) {
-                if(!airportGraph.findVertex(u.getDest()->getInfo())){
-                    count++;
+                if(!visitedCities.count(u.getDest()->getInfo().getCountry().getCountryName())){
                     airportGraph.addVertex(u.getDest()->getInfo());
-                    count += NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
-                    if (visitedCities.find(u.getDest()->getInfo().getCountry().getCity()) != visitedCities.end()) {
-                        count--;
-                    }else{
-                        visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
-                    }
+                    NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
+                    visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
                 }
             }
         }
     }
 
-    return count;
+    return visitedCities.size();
 }
 
 int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries) {
-    int count = 0;
     if (stop == 0) {
         return 0;
     }
@@ -514,21 +507,16 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
     for (auto i : Travels.getVertexSet()) {
         if (i->getInfo().getCode() == airport) {
             for (auto u : i->getAdj()) {
-                if(!airportGraph.findVertex(u.getDest()->getInfo())){
-                    count++;
+                if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
                     airportGraph.addVertex(u.getDest()->getInfo());
-                    count += NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
-                    if (visitedCountries.find(u.getDest()->getInfo().getCountry().getCountryName()) != visitedCountries.end()) {
-                        count--;
-                    }else{
-                        visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
-                    }
+                    NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
+                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
                 }
             }
         }
     }
 
-    return count;
+    return visitedCountries.size();
 }
 
 void menu::findMaxStopsTrip() {
