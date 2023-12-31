@@ -122,16 +122,17 @@ void menu:: menuAirportStatistics(){
     restoreEntrace();
     switch (select){
         case 0:
-            NumberofAirports();
+            std::cout << "The total number of airports in this network is \033[1;31m> " << NumberofAirports() << " <\033[0m" << std::endl;
             wait();
             break;
-        case 1:
-        {string cin1;
-            cin >> cin1;
-            auto a = airports[cin1];
+        case 1:{
+            cout << "Enter the code of the Airport to look up: ";
+            string code;
+            cin >> code;
+            auto a = airports[code];
             int airlines;
             int u = FlightsoutofAirport(*a,airlines);
-            cout << "O Aeroporto de Lisboa tem " << u << " voos e " << airlines << " companhias aereas" << endl;
+            cout << airports[code]->getName() << "has " << u << " possible flights and works with " << airlines << " airlines" << endl;
             wait();
             break;}
         case 2:
@@ -144,6 +145,7 @@ void menu:: menuAirportStatistics(){
             break;}
         case 3:
             cout << "No lay-over flights: " << endl;
+            directFlights();
             wait();
             break;
         case 4:
@@ -159,10 +161,15 @@ void menu:: menuAirportStatistics(){
             TopAirportsintrafficcapacity(cin1);
             wait();
             break;
-        case 7:
-            EssencialAirports();
+        case 7:{
+            auto x = articulationPoints();
+            cout << "In this network " << x.size() << " airports are essential" << endl;
+            cout << "Do you want a full list on the essential Airports?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes") for(auto y: x) cout << y.getName() << endl;
             wait();
-            break;
+            break;}
         case 8:
             menuStatistics();
     }
@@ -365,7 +372,6 @@ int menu::NumberofAirports() {
     for(auto i : Travels.getVertexSet()){
         count++;
     }
-    cout << count << endl;
     return count;
 }
 int menu::NumberofFlights() {
@@ -456,6 +462,72 @@ int menu::NumberofFlightsperCityandAir(string city, string air){
         }
     }
     return count;
+}
+
+
+void menu::directFlights() {
+    cout << "Enter the code of the Airport of interest: ";
+    string code;
+    cin >> code;
+    Airport *a = airports.find(code)->second;
+    cout << "Select one option:" << endl << "1- Search by nº of reachable countries " << endl;
+    cout << "2- Search by nº of reachable cities" << endl << "3- Search by nº of reachable airports" << endl;
+    int n = 0;
+    auto vertex = Travels.findVertex(*a);
+    vector<string> destCountries, destCities, destAirports;
+    for (auto x: vertex->getAdj()) {
+        auto adest = x.getDest()->getInfo();
+        auto city = find(destCities.begin(), destCities.end(), adest.getCountry().getCity());
+        if (city == destCities.end())
+            destCities.push_back(adest.getCountry().getCity());
+        auto country = find(destCountries.begin(), destCountries.end(), adest.getCountry().getCountryName());
+        if (country == destCountries.end())
+            destCountries.push_back(adest.getCountry().getCountryName());
+        auto airport = find(destAirports.begin(), destAirports.end(), adest.getCode());
+        if (airport == destAirports.end())
+            destAirports.push_back(adest.getName());
+    }
+    cin >> n;
+    switch (n) {
+        case 1: {
+            cout << "From " << a->getName() << " there are " << destCountries.size()
+                 << " reachable countries with direct flights" << endl;
+            cout << "Press L for access the full list of Countries" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto x: destCountries) {
+                    cout << x << endl;
+                }
+            }
+            break;
+        }
+        case 2: {
+            cout << "From " << a->getName() << " there are " << destCities.size() << " reachable Cities with direct flights" << endl;
+            cout << "Press L for access the full list of Cities" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto x: destCities) {
+                    cout << x << endl;
+                }
+            }
+            break;
+        }
+        case 3:
+            cout << "From " << a->getName() << " there are " << destAirports.size() << " reachable Airports with direct flights" << endl;
+            cout << "Press L for access the full list of Airports" << endl;
+            string letter;
+            cin >> letter;
+            if (letter == "L" or letter == "l") {
+                cout << endl;
+                for (auto y: destAirports) {
+                    cout << y << endl;
+                }
+            }
+    }
 }
 
 int menu::NumberofStopsairports(string airport, int stop, Graph<Airport>& airportGraph) {
@@ -782,3 +854,47 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
     double c = 2 * asin(sqrt(a));
     return rad * c;
 }
+
+
+
+vector<Airport> menu::articulationPoints() const {
+    vector<Airport> articulation;
+    for (auto v : Travels.getVertexSet()){
+        v->setProcessing(false);
+        v->setLow(0);
+        v->setNum(0);
+    }
+    int dTime = 1;
+    for (auto v : Travels.getVertexSet())
+        if (! v->isVisited()){
+            aux(v, articulation, dTime);
+        }
+    return articulation;
+}
+
+void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
+    v->setNum(dTime);
+    v->setLow(dTime);
+    v->setProcessing(true);
+    int tree = 0;
+    for (auto w: v->getAdj()){
+        if(w.getDest()->getNum() == 0){
+            tree++;
+            aux(w.getDest(), articulation, dTime +1);
+            v->setLow(min(v->getLow(), w.getDest()->getLow()));
+            if((w.getDest()->getLow() >= v->getNum() and v->getNum()!= 1) or (v->getNum() == 1 and tree > 1)){
+                auto it = find(articulation.begin(), articulation.end(), v->getInfo());
+                if (it == articulation.end()) {
+                    articulation.push_back(v->getInfo());
+                }
+            }
+        }
+        else if( v->isProcessing()){
+            v->setLow(min(v->getLow(), w.getDest()->getNum()));
+        }
+    }
+    v->setProcessing(false);
+
+
+}
+
