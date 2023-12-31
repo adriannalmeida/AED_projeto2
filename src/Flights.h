@@ -10,9 +10,9 @@ private:
     Airline airline;
 public:
     Flights(string src, string dest, Airline airline);
-    string getsrc();
-    string getdest();
-    Airline getAirline();
+    string getsrc() const;
+    string getdest() const;
+    Airline getAirline() const;
 };
 
 

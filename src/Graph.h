@@ -31,6 +31,8 @@ class Vertex {
     int indegree;          // auxiliary field
     int num;               // auxiliary field
     int low;               // auxiliary field
+    double distance;       // auxiliary field
+    Vertex<T>* previous;   // auxiliary field
 
     void addEdge(Vertex<T> *dest, double distance, Airline airline);
     bool removeEdgeTo(Vertex<T> *d);
@@ -59,6 +61,22 @@ public:
     void setLow(int low);
 
     friend class Graph<T>;
+
+    double getDistance() const {
+        return distance;
+    }
+
+    void setDistance(double d) {
+        distance = d;
+    }
+
+    Vertex<T>* getPrevious() const {
+        return previous;
+    }
+
+    void setPrevious(Vertex<T>* prev) {
+        previous = prev;
+    }
 };
 
 template <class T>
@@ -76,6 +94,9 @@ public:
     void setDistance(double distance);
     friend class Graph<T>;
     friend class Vertex<T>;
+    double getWeight() const {
+        return distance;
+    }
 };
 
 template <class T>
