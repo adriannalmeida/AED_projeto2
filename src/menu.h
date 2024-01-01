@@ -36,6 +36,7 @@ class menu {
     set<string> DifferentFlightsto(Airport& airport);
     void TopAirportsintrafficcapacity(int n);
     int NumberofFlights();
+
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
     void printMenu(vector<string> options, int size, int select, string menuName);
     void auxprintMenu(vector<string> options, int & size, int &select, string menuName);
@@ -59,8 +60,10 @@ class menu {
     vector<Airport*> UsingCity(const string& city);
     vector<Airport*> UsingLocation(double latitude, double longitude);
     void findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports);
+    void findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports, Airline* airline);
     vector<Vertex<Airport> *> findMinStopsTripHelper(Airport* src, Airport* dest);
     void printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) const;
+    void printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& bestPaths, Airline* airline) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2);
     template<typename T>
     struct CompareDist {
