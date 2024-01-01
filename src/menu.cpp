@@ -182,6 +182,7 @@ void menu:: menuAirportStatistics(){
             wait();
             break;
         case 6:
+            cout << "Enter the number of Airports: " << endl;
             int cin1;
             cout << "Enter the number of airports you want to see: " << endl;
             cin >> cin1;
@@ -190,6 +191,7 @@ void menu:: menuAirportStatistics(){
             break;
         case 7:{
             auto x = articulationPoints();
+            sort(x.begin(), x.end());
             cout << "In this network " << x.size() << " airports are essential" << endl;
             cout << "Do you want a full list on the essential Airports?"<< endl << "Enter Yes to access the list:";
             string ans;
@@ -202,6 +204,7 @@ void menu:: menuAirportStatistics(){
     }
 
 }
+
 void menu::menuDestination() {
     int size = 3, select = 0;
     vector <string> options = {"Number of Airports", "Number of Cities", "Number of Countries"};
@@ -532,7 +535,7 @@ void menu::directFlights() {
         auto country = find(destCountries.begin(), destCountries.end(), adest.getCountry().getCountryName());
         if (country == destCountries.end())
             destCountries.push_back(adest.getCountry().getCountryName());
-        auto airport = find(destAirports.begin(), destAirports.end(), adest.getCode());
+        auto airport = find(destAirports.begin(), destAirports.end(), adest.getName());
         if (airport == destAirports.end())
             destAirports.push_back(adest.getName());
     }
@@ -546,6 +549,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destCountries.begin(), destCountries.end());
                 for (auto x: destCountries) {
                     cout << x << endl;
                 }
@@ -559,6 +563,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destCities.begin(), destCities.end());
                 for (auto x: destCities) {
                     cout << x << endl;
                 }
@@ -572,6 +577,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destAirports.begin(), destAirports.end());
                 for (auto y: destAirports) {
                     cout << y << endl;
                 }
@@ -624,19 +630,14 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
     if (stop == 0) {
         return 0;
     }
-
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
-                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
+            airportGraph.addVertex(u.getDest()->getInfo());
+            NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
+            visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
         }
     }
-
     return visitedCountries.size();
 }
 
@@ -981,16 +982,39 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
     return rad * c;
 }
 
+Graph<Airport> menu :: undirectedGraph(){
+    Graph<Airport> undirectedTRavels = Travels;
+    for (auto vertex:  Travels.getVertexSet()){
+        for(auto edge: vertex-> getAdj()){
+            auto destVertex = edge.getDest();
+            int f = 0;
+            for (auto v: destVertex->getAdj()){
+                if(v.getDest() == vertex)
+                    f = 1;
+            }
+            if(f == 0){
+                Airline a;
+                Edge<Airport> k = Edge(vertex, 0, a );
+                auto adj = destVertex->getAdj();
+                adj.push_back(k);
+                destVertex->setAdj(adj);
+            }
+        }
+    }
+    return undirectedTRavels;
+}
 
-vector<Airport> menu::articulationPoints() const {
+//vector<Airport> menu::articulationPoints() const {
+vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
-    for (auto v : Travels.getVertexSet()){
+    Graph<Airport> undirectedTravels = undirectedGraph();
+    for (auto v : undirectedTravels.getVertexSet()){
         v->setProcessing(false);
         v->setLow(0);
         v->setNum(0);
     }
     int dTime = 1;
-    for (auto v : Travels.getVertexSet())
+    for (auto v : undirectedTravels.getVertexSet())
         if (! v->isVisited()){
             auxArticulationPoints(v, articulation, dTime);
         }
