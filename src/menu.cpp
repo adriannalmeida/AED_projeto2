@@ -27,25 +27,34 @@ void menu:: restoreEntrace() {
     tcsetattr(STDIN_FILENO, TCSANOW, &t);
 }
 
-void menu:: printMenu(vector<string> options, int size, int select) {
-    system("clear");  // Limpa a tela (Linux)
-    cout << "__________________________________________\n";
-    cout << "|                Menu                    |\n";
-    cout << "|        Choose one of the options       |\n";
-    cout << "|________________________________________|\n";
+void menu::printMenu(vector<string> options, int size, int select, string menuName) {
+    system("clear");
+    int terminalWidth = 44;
+    int menuIndentation = 22 - (menuName.size() / 2);
+    std::cout << "_______________________________________________\n";
+    std::cout << "" << std::setw(menuIndentation) << "" << menuName << std::setw(menuIndentation) << "" << "\n";
+    std::cout << "|          Choose one of the options          |\n";
+    std::cout << "|_____________________________________________|\n";
+
+    int maxOptionLength = 0;
+    for (const std::string& option : options) {
+        maxOptionLength = std::max(maxOptionLength, static_cast<int>(option.length()));
+    }
     for (int i = 0; i < size; ++i) {
+        int indentation = (terminalWidth - maxOptionLength) / 2;
         if (i == select) {
-            cout << "      \033[1;31m> " << options[i] << " <\033[0m" << endl;  // Set text to red
+            std::cout << setw(indentation) << "" << "\033[1;31m> " << options[i] << " <\033[0m\n"; // Set text to red
         } else {
-            cout << "       " << options[i] << " " << endl;
+            std::cout << setw(indentation) << "" << options[i] << "\n";
         }
     }
-    cout << "|________________________________________|\n";
+    std::cout << "|______________________________________________|\n";
 }
-void menu:: auxprintMenu(vector<string> options, int & size, int &select){
+
+void menu:: auxprintMenu(vector<string> options, int & size, int &select, string menuName){
     char keyStroke;
     do{
-            printMenu(options, size, select);
+            printMenu(options, size, select, menuName);
             keyStroke = getchar();
             switch (keyStroke){
                 case '\033':  // Tecla de escape, indica que uma sequência de controle está chegando
@@ -68,7 +77,7 @@ void menu::mainMenu(){
     int size = 4, select = 0;
     vector <string> options = {"Statistics ", "Best Flight Option", "Coisa ", "QUIT "};
     nonBlockingEntrance();
-    auxprintMenu(options, size, select);
+    auxprintMenu(options, size, select, "Menu");
     restoreEntrace();
     switch (select){
         case 0:
@@ -92,7 +101,7 @@ void menu::menuStatistics() {
     int size = 4, select = 0;
     vector <string> options = {"Airports Statistics", "Flights Statistics", "Go back", "QUIT "};
     nonBlockingEntrance();
-    auxprintMenu(options,size,select);
+    auxprintMenu(options,size,select, "Statistics");
     restoreEntrace();
     switch (select){
         case 0:
@@ -115,32 +124,49 @@ void menu::menuStatistics() {
 
 void menu:: menuAirportStatistics(){
     int size = 9, select = 0;
-    vector <string> options = {"Total Nº of Airports", "Nº of Flights per Airport", "Nº of countries", "No lay-over flights",
+    vector <string> options = {"Total Nº of Airports", "Nº of Flights per Airport", "Destination countries", "No lay-over flights",
                                "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Essential Airports", "Go back"};
     nonBlockingEntrance();
-    auxprintMenu(options,size,select);
+    auxprintMenu(options,size,select, "Airport Statistics");
     restoreEntrace();
     switch (select){
         case 0:
-            std::cout << "The total number of airports in this network is \033[1;31m> " << NumberofAirports() << " <\033[0m" << std::endl;
+            std::cout << "The total number of airports in this network is \033[1;31m" << NumberofAirports() << "\033[0m" << std::endl;
             wait();
             break;
         case 1:{
-            cout << "Enter the code of the Airport to look up: ";
-            string code;
-            cin >> code;
+            int f = 1; string code;
+            do{cout << "Enter the code of the Airport of interest: ";
+                cin >> code; f = 1;
+                auto it =airports.find(code);
+                if(it == airports.end()){
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            }while (f == 0);
             auto a = airports[code];
             int airlines;
             int u = FlightsoutofAirport(*a,airlines);
-            cout << airports[code]->getName() << "has " << u << " possible flights and works with " << airlines << " airlines" << endl;
+            cout << airports[code]->getName() << "has \033[1;31m" << u << "\033[0m possible flights and works with \033[1;31m" << airlines << "\033[0m airlines" << endl;
             wait();
             break;}
-        case 2:
-        {
-            string cin1;
-            cin >> cin1;
-            int u = DifferentFlightsto(*airports[cin1]);
-            cout << "Nº of countries " << u << endl;
+        case 2:{
+            int f = 1; string code;
+            do{
+                cout << "Enter the code of the Airport of interest: ";
+                cin >> code; f = 1;
+                auto it =airports.find(code);
+                if(it == airports.end()){
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            }while (f == 0);
+            auto dest = DifferentFlightsto(*airports[code]);
+            cout << airports[code]->getName() <<" flies to \033[1;31m" << dest.size() << "\033[0m different countries"<< endl;
+            cout << "Do you want a full list of countries?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes") for(auto y: dest) cout << y << endl;
             wait();
             break;}
         case 3:
@@ -176,10 +202,10 @@ void menu:: menuAirportStatistics(){
 
 }
 void menu::menuDestination() {
-    int size = 4, select = 0;
-    vector <string> options = {"Number of Airports", "Number of Cities", "Number of Countries", "Go back"};
+    int size = 3, select = 0;
+    vector <string> options = {"Number of Airports", "Number of Cities", "Number of Countries"};
     nonBlockingEntrance();
-    auxprintMenu(options,size,select);
+    auxprintMenu(options,size,select, "Destinations");
     restoreEntrace();
     switch (select){
         case 0:
@@ -220,8 +246,9 @@ void menu::menuDestination() {
             cout << n << endl;
             wait();
             break;}
-        case 3:
-            menuAirportStatistics();
+
+        //case 3:
+            //menuAirportStatistics();
     }
 
 }
@@ -229,7 +256,7 @@ void menu::menuFlightStatistics(){
     int size = 6, select = 0;
     vector <string> options = {"Total Flights", "Flights per City", "Flights per Airline", "Flights per City and Airline" ,"Flights from City X","Go back"};
     nonBlockingEntrance();
-    auxprintMenu(options,size,select);
+    auxprintMenu(options,size,select, "Flight Statistics");
     restoreEntrace();
     switch (select){
         case 0:
@@ -466,13 +493,21 @@ int menu::NumberofFlightsperCityandAir(string city, string air){
 
 
 void menu::directFlights() {
-    cout << "Enter the code of the Airport of interest: ";
-    string code;
-    cin >> code;
+    int size = 3, select = 0;
+    vector <string> options = {"Search by nº of reachable countries", "Search by nº of reachable cities", "Search by nº of reachable airports"};
+    nonBlockingEntrance();
+    auxprintMenu(options,size,select, "");
+    restoreEntrace();
+    int f = 1; string code;
+    do{cout << "Enter the code of the Airport of interest: " << endl;
+        cin >> code; f = 1;
+        auto it =airports.find(code);
+        if(it == airports.end()){
+            f = 0;
+            cout << "Invalid code" << endl;
+        }
+    }while (f == 0);
     Airport *a = airports.find(code)->second;
-    cout << "Select one option:" << endl << "1- Search by nº of reachable countries " << endl;
-    cout << "2- Search by nº of reachable cities" << endl << "3- Search by nº of reachable airports" << endl;
-    int n = 0;
     auto vertex = Travels.findVertex(*a);
     vector<string> destCountries, destCities, destAirports;
     for (auto x: vertex->getAdj()) {
@@ -487,15 +522,15 @@ void menu::directFlights() {
         if (airport == destAirports.end())
             destAirports.push_back(adest.getName());
     }
-    cin >> n;
-    switch (n) {
-        case 1: {
-            cout << "From " << a->getName() << " there are " << destCountries.size()
-                 << " reachable countries with direct flights" << endl;
-            cout << "Press L for access the full list of Countries" << endl;
-            string letter;
-            cin >> letter;
-            if (letter == "L" or letter == "l") {
+
+    switch (select) {
+        case 0: {
+            cout << "From " << a->getName() << "there are \033[1;31m" << destCountries.size()
+                 << "\033[0m reachable countries with direct flights" << endl;
+            cout << "Do you want a full list of countries?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes"){
                 cout << endl;
                 for (auto x: destCountries) {
                     cout << x << endl;
@@ -503,12 +538,12 @@ void menu::directFlights() {
             }
             break;
         }
-        case 2: {
-            cout << "From " << a->getName() << " there are " << destCities.size() << " reachable Cities with direct flights" << endl;
-            cout << "Press L for access the full list of Cities" << endl;
-            string letter;
-            cin >> letter;
-            if (letter == "L" or letter == "l") {
+        case 1: {
+            cout << "From " << a->getName() << " there are \033[1;31m" << destCities.size() << "\033[0m reachable Cities with direct flights" << endl;
+            cout << "Do you want a full list of countries?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes"){
                 cout << endl;
                 for (auto x: destCities) {
                     cout << x << endl;
@@ -516,12 +551,12 @@ void menu::directFlights() {
             }
             break;
         }
-        case 3:
-            cout << "From " << a->getName() << " there are " << destAirports.size() << " reachable Airports with direct flights" << endl;
-            cout << "Press L for access the full list of Airports" << endl;
-            string letter;
-            cin >> letter;
-            if (letter == "L" or letter == "l") {
+        case 2:
+            cout << "From " << a->getName() << " there are \033[1;31m" << destAirports.size() << "\033[0m reachable Airports with direct flights" << endl;
+            cout << "Do you want a full list of countries?"<< endl << "Enter Yes to access the list:";
+            string ans;
+            cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
+            if(ans == "yes"){
                 cout << endl;
                 for (auto y: destAirports) {
                     cout << y << endl;
@@ -592,24 +627,51 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
 }
 
 void menu::findMaxStopsTrip() {
-    int maxStops = 0;
-    vector<pair<string, string>> currentTrip;
-    set<pair<string, string>> printedTrips;
-    unordered_set<string> visitedAirports;
-
-    for (auto u : Travels.getVertexSet()) {
-        if (!visitedAirports.count(u->getInfo().getCode())) {
-            visitedAirports.insert(u->getInfo().getCode());
-            findMaxStopsTripHelper(u, maxStops, currentTrip, printedTrips, visitedAirports);
-            visitedAirports.erase(u->getInfo().getCode());
+    int f = 1, maxStops = 0, temp = 0;
+    string code;
+    do {
+        cout << "Enter the code of the Airport of interest: ";
+        cin >> code;
+        f = 1;
+        auto it = airports.find(code);
+        if (it == airports.end()) {
+            f = 0;
+            cout << "Invalid code" << endl;
         }
-    }
+    } while (f == 0);
 
-    cout << "Maximum stops trip(s):" << endl;
-    for (const auto &trip : printedTrips) {
-        cout << "From " << trip.first << " to " << trip.second << "/" << printedTrips.size() << endl;
+    vector<string> airportsCode;
+    auto a1 = Travels.findVertex(*airports[code]);
+    queue<Vertex<Airport> *> q;
+    for (auto v : Travels.getVertexSet())
+        v->setVisited(false);
+    q.push(a1);
+    a1->setVisited(true);
+    int level = 0;
+    while (!q.empty()) {
+        int size = q.size();
+        for (int x = 0; x < size; x++){
+            auto v = q.front();
+            q.pop();
+            for (auto & e : v->getAdj()) {
+                auto w = e.getDest();
+                if (! w->isVisited()) {
+                    q.push(w);
+                    w->setVisited(true);
+                    //airportsCode.push_back(v->getInfo().getCode());
+                }
+            }
+        }level++;
     }
+    cout << "NOTE:" << endl;
+    cout << "This option calculates the fastest way to get to the airport that requires teh biggest number of stops to get there" << endl <<
+    " however have in mind that this calculates the best path and not a path with loops as it would useless to repeat airports" << endl <<
+    " or travel to two airports when one might be enough to reach the final destination" << endl;
+    cout << endl << "From " << airports[code]->getName() << " the trip with most stops passes through \033[1;31m" << level << "\033[0m airports " << endl;
+
 }
+
+
 
 void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport,
                                   int &maxStops, vector<pair<string, string>> &currentTrip,
@@ -644,18 +706,16 @@ void menu::findMaxStopsTripHelper(Vertex<Airport> *currentAirport,
     }
 }
 
-int menu::DifferentFlightsto(Airport& airport){
-    unordered_set<string> visitedCountries;
-    for(auto i : Travels.getVertexSet()){
-        if(i->getInfo() == airport) {
-            for (auto u: i->getAdj()) {
-                if (!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())) {
-                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
+set<string> menu::DifferentFlightsto(Airport& airport){
+    set<string> visitedCountries;
+    //for (auto i: airport)
+    auto i = Travels.findVertex(airport);
+    for (auto u: i->getAdj()) {
+        if (!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())) {
+            visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
                 }
             }
-        }
-    }
-    return visitedCountries.size();
+    return visitedCountries;
 }
 void menu::TopAirportsintrafficcapacity(int n) {
     for(auto i : Travels.getVertexSet()){
@@ -680,6 +740,8 @@ void menu::TopAirportsintrafficcapacity(int n) {
         aux->setNum(0);
     }
 }
+
+//master
 void menu::EssencialAirports(){
     unordered_set<Vertex<Airport>*> aux;
 
@@ -856,6 +918,7 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
 }
 
 
+//>>>>>>> master
 
 vector<Airport> menu::articulationPoints() const {
     vector<Airport> articulation;
@@ -867,12 +930,12 @@ vector<Airport> menu::articulationPoints() const {
     int dTime = 1;
     for (auto v : Travels.getVertexSet())
         if (! v->isVisited()){
-            aux(v, articulation, dTime);
+            auxArticulationPoints(v, articulation, dTime);
         }
     return articulation;
 }
 
-void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
+void menu::auxArticulationPoints(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const {
     v->setNum(dTime);
     v->setLow(dTime);
     v->setProcessing(true);
@@ -880,7 +943,7 @@ void menu::aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) con
     for (auto w: v->getAdj()){
         if(w.getDest()->getNum() == 0){
             tree++;
-            aux(w.getDest(), articulation, dTime +1);
+            auxArticulationPoints(w.getDest(), articulation, dTime +1);
             v->setLow(min(v->getLow(), w.getDest()->getLow()));
             if((w.getDest()->getLow() >= v->getNum() and v->getNum()!= 1) or (v->getNum() == 1 and tree > 1)){
                 auto it = find(articulation.begin(), articulation.end(), v->getInfo());

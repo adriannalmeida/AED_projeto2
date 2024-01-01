@@ -27,6 +27,7 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/bits/basic_string.tcc
  /usr/include/c++/12/bits/char_traits.h
  /usr/include/c++/12/bits/charconv.h
+ /usr/include/c++/12/bits/codecvt.h
  /usr/include/c++/12/bits/concept_check.h
  /usr/include/c++/12/bits/cpp_type_traits.h
  /usr/include/c++/12/bits/cxxabi_forced.h
@@ -48,8 +49,11 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/bits/list.tcc
  /usr/include/c++/12/bits/locale_classes.h
  /usr/include/c++/12/bits/locale_classes.tcc
+ /usr/include/c++/12/bits/locale_conv.h
  /usr/include/c++/12/bits/locale_facets.h
  /usr/include/c++/12/bits/locale_facets.tcc
+ /usr/include/c++/12/bits/locale_facets_nonio.h
+ /usr/include/c++/12/bits/locale_facets_nonio.tcc
  /usr/include/c++/12/bits/localefwd.h
  /usr/include/c++/12/bits/memoryfwd.h
  /usr/include/c++/12/bits/move.h
@@ -61,11 +65,13 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/bits/postypes.h
  /usr/include/c++/12/bits/predefined_ops.h
  /usr/include/c++/12/bits/ptr_traits.h
+ /usr/include/c++/12/bits/quoted_string.h
  /usr/include/c++/12/bits/random.h
  /usr/include/c++/12/bits/random.tcc
  /usr/include/c++/12/bits/range_access.h
  /usr/include/c++/12/bits/refwrap.h
  /usr/include/c++/12/bits/specfun.h
+ /usr/include/c++/12/bits/sstream.tcc
  /usr/include/c++/12/bits/std_abs.h
  /usr/include/c++/12/bits/stl_algo.h
  /usr/include/c++/12/bits/stl_algobase.h
@@ -108,6 +114,7 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/cstdint
  /usr/include/c++/12/cstdio
  /usr/include/c++/12/cstdlib
+ /usr/include/c++/12/ctime
  /usr/include/c++/12/cwchar
  /usr/include/c++/12/cwctype
  /usr/include/c++/12/debug/assertions.h
@@ -121,12 +128,14 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/ext/string_conversions.h
  /usr/include/c++/12/ext/type_traits.h
  /usr/include/c++/12/initializer_list
+ /usr/include/c++/12/iomanip
  /usr/include/c++/12/ios
  /usr/include/c++/12/iosfwd
  /usr/include/c++/12/iostream
  /usr/include/c++/12/istream
  /usr/include/c++/12/limits
  /usr/include/c++/12/list
+ /usr/include/c++/12/locale
  /usr/include/c++/12/map
  /usr/include/c++/12/new
  /usr/include/c++/12/numeric
@@ -138,6 +147,7 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/c++/12/queue
  /usr/include/c++/12/random
  /usr/include/c++/12/set
+ /usr/include/c++/12/sstream
  /usr/include/c++/12/stack
  /usr/include/c++/12/stdexcept
  /usr/include/c++/12/streambuf
@@ -167,6 +177,7 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/errno.h
  /usr/include/features-time64.h
  /usr/include/features.h
+ /usr/include/libintl.h
  /usr/include/linux/close_range.h
  /usr/include/linux/errno.h
  /usr/include/locale.h
@@ -278,8 +289,10 @@ CMakeFiles/2Projeto.dir/main.cpp.o
  /usr/include/x86_64-linux-gnu/c++/12/bits/error_constants.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr-default.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr.h
+ /usr/include/x86_64-linux-gnu/c++/12/bits/messages_members.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/opt_random.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h
+ /usr/include/x86_64-linux-gnu/c++/12/bits/time_members.h
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h
  /usr/include/x86_64-linux-gnu/gnu/stubs.h
  /usr/include/x86_64-linux-gnu/sys/cdefs.h
@@ -1482,6 +1495,7 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/bits/basic_string.tcc
  /usr/include/c++/12/bits/char_traits.h
  /usr/include/c++/12/bits/charconv.h
+ /usr/include/c++/12/bits/codecvt.h
  /usr/include/c++/12/bits/concept_check.h
  /usr/include/c++/12/bits/cpp_type_traits.h
  /usr/include/c++/12/bits/cxxabi_forced.h
@@ -1503,8 +1517,11 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/bits/list.tcc
  /usr/include/c++/12/bits/locale_classes.h
  /usr/include/c++/12/bits/locale_classes.tcc
+ /usr/include/c++/12/bits/locale_conv.h
  /usr/include/c++/12/bits/locale_facets.h
  /usr/include/c++/12/bits/locale_facets.tcc
+ /usr/include/c++/12/bits/locale_facets_nonio.h
+ /usr/include/c++/12/bits/locale_facets_nonio.tcc
  /usr/include/c++/12/bits/localefwd.h
  /usr/include/c++/12/bits/memoryfwd.h
  /usr/include/c++/12/bits/move.h
@@ -1516,8 +1533,10 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/bits/postypes.h
  /usr/include/c++/12/bits/predefined_ops.h
  /usr/include/c++/12/bits/ptr_traits.h
+ /usr/include/c++/12/bits/quoted_string.h
  /usr/include/c++/12/bits/range_access.h
  /usr/include/c++/12/bits/refwrap.h
+ /usr/include/c++/12/bits/sstream.tcc
  /usr/include/c++/12/bits/std_abs.h
  /usr/include/c++/12/bits/stl_algo.h
  /usr/include/c++/12/bits/stl_algobase.h
@@ -1558,6 +1577,7 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/cstdint
  /usr/include/c++/12/cstdio
  /usr/include/c++/12/cstdlib
+ /usr/include/c++/12/ctime
  /usr/include/c++/12/cwchar
  /usr/include/c++/12/cwctype
  /usr/include/c++/12/debug/assertions.h
@@ -1571,12 +1591,14 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/ext/string_conversions.h
  /usr/include/c++/12/ext/type_traits.h
  /usr/include/c++/12/initializer_list
+ /usr/include/c++/12/iomanip
  /usr/include/c++/12/ios
  /usr/include/c++/12/iosfwd
  /usr/include/c++/12/iostream
  /usr/include/c++/12/istream
  /usr/include/c++/12/limits
  /usr/include/c++/12/list
+ /usr/include/c++/12/locale
  /usr/include/c++/12/map
  /usr/include/c++/12/new
  /usr/include/c++/12/ostream
@@ -1585,6 +1607,7 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/c++/12/pstl/pstl_config.h
  /usr/include/c++/12/queue
  /usr/include/c++/12/set
+ /usr/include/c++/12/sstream
  /usr/include/c++/12/stack
  /usr/include/c++/12/stdexcept
  /usr/include/c++/12/streambuf
@@ -1602,6 +1625,7 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/errno.h
  /usr/include/features-time64.h
  /usr/include/features.h
+ /usr/include/libintl.h
  /usr/include/linux/close_range.h
  /usr/include/linux/errno.h
  /usr/include/locale.h
@@ -1703,7 +1727,9 @@ CMakeFiles/2Projeto.dir/src/menu.cpp.o
  /usr/include/x86_64-linux-gnu/c++/12/bits/error_constants.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr-default.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/gthr.h
+ /usr/include/x86_64-linux-gnu/c++/12/bits/messages_members.h
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h
+ /usr/include/x86_64-linux-gnu/c++/12/bits/time_members.h
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h
  /usr/include/x86_64-linux-gnu/gnu/stubs.h
  /usr/include/x86_64-linux-gnu/sys/cdefs.h
