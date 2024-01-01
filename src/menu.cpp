@@ -183,6 +183,7 @@ void menu:: menuAirportStatistics(){
             break;
         case 6:
             int cin1;
+            cout << "Enter the number of airports you want to see: " << endl;
             cin >> cin1;
             TopAirportsintrafficcapacity(cin1);
             wait();
@@ -265,6 +266,7 @@ void menu::menuFlightStatistics(){
             break;
         case 1:
             {string city;
+            cout << "Enter the city of interest:" << endl;
             getline(cin, city);
             int count = NumberofFlightspercity(city);
             cout  << count << endl;
@@ -312,10 +314,12 @@ void menu::menuAirports() {
             break;}
         case 1:
         {
-            string airlineStr;
-            cin >> airlineStr;
+
             vector<Airport*> srcAirports = SelectAirportSrc();
             vector<Airport*> destAirports = SelectAirportDest();
+            cout << "Airline:" << endl;
+            string airlineStr;
+            cin >> airlineStr;
             Airline* airline = airlines[airlineStr];
             findBestFlightOptionWithFilters(srcAirports, destAirports, airline);
             wait();
@@ -851,7 +855,7 @@ void menu::findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, 
         }
     }
 
-    printBestFlights(bestPaths);
+    printBestFlightsWithFilters(bestPaths, airline);
 }
 vector<Vertex<Airport> *> menu::findMinStopsTripHelper(Airport* src, Airport* dest) {
     priority_queue<Vertex<Airport>*, vector<Vertex<Airport>*>, CompareDist<Airport>> pq;
@@ -907,7 +911,6 @@ void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) c
         for (size_t i = 0; i < path.size() - 1; ++i) {
             string src = path[i]->getInfo().getCode();
             string dest = path[i + 1]->getInfo().getCode();
-            Airline* airline = nullptr;
 
             for (auto u : Travels.getVertexSet()) {
                 if (u->getInfo().getCode() == src) {
@@ -915,20 +918,50 @@ void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) c
                         if (edge.getDest()->getInfo().getCode() == dest) {
                             auto it = airlines.find(edge.getAirline().getCode());
                             if (it != airlines.end()) {
-                                airline = it->second;
+                                Flights flight(src, dest, *it->second);
+                                cout << "From: " << flight.getsrc() << " To: " << flight.getdest() << " Airline: " << it->second->getCode() << endl;
                             }
                         }
                     }
                 }
             }
-
-            if (airline) {
-                Flights flight(src, dest, *airline);
-                cout << "From: " << flight.getsrc() << " To: " << flight.getdest() << " Airline: " << flight.getAirline().getName() << endl;
-            }
         }
         cout << "----------------------------" << endl;
     }
+}
+
+
+void menu::printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& bestPaths, Airline* airline) const {
+    cout << "Best Flight Options:" << endl;
+    vector<Flights> flights;
+    for (const auto& path : bestPaths) {
+        for (size_t i = 0; i < path.size() - 1; ++i) {
+            string src = path[i]->getInfo().getCode();
+            string dest = path[i + 1]->getInfo().getCode();
+
+            for (auto u : Travels.getVertexSet()) {
+                if (u->getInfo().getCode() == src) {
+                    for (auto edge : u->getAdj()) {
+                        if (edge.getDest()->getInfo().getCode() == dest) {
+                            auto it = airlines.find(edge.getAirline().getCode());
+                            if (it != airlines.end() && it->second == airline) {
+                                Flights flight(src, dest, *it->second);
+                                flights.push_back(flight);
+                            }
+                            else if(it != airlines.end() && it->second != airline){
+                                flights.clear();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+    for(auto i : flights){
+        cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+    }
+    cout << "----------------------------" << endl;
 }
 
 double menu::haversineDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -948,8 +981,6 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
     return rad * c;
 }
 
-
-//>>>>>>> master
 
 vector<Airport> menu::articulationPoints() const {
     vector<Airport> articulation;

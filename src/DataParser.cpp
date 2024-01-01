@@ -65,45 +65,45 @@ void DataParser::readAirlines() {
 
 
 void DataParser::readFlights() {
-
     ifstream csv(path + "/flights.csv");
     if (!csv.is_open()) {
         cerr << "Error opening flights.csv" << endl;
         return;
     }
+
     string line;
     getline(csv, line, '\n'); // Ignore Header
 
-    while (getline(csv, line, '\n')) {
+    unordered_map<string, Airport*> airportMap;
+    unordered_map<string, Airline*> airlineMap;
 
-        string source, target, airline;
+    // Preencher os mapas de aeroportos e companhias aéreas
+    for (const auto &airport : airports) {
+        airportMap[airport.second->getCode()] = airport.second;
+    }
+
+    for (const auto &airline : airlines) {
+        airlineMap[airline.second->getCode()] = airline.second;
+    }
+
+    while (getline(csv, line, '\n')) {
         stringstream tmp(line);
+        string source, target, airline;
 
         getline(tmp, source, ',');
         getline(tmp, target, ',');
         getline(tmp, airline);
 
-        Airport* src;
-        Airport* dest;
+        Airport* src = airportMap[source];
+        Airport* dest = airportMap[target];
+        Airline* air = airlineMap[airline];
 
-        for(auto & airport : airports){
-            if(airport.second->getCode() == source){
-                src = airport.second;
-
-            }
-            if(airport.second->getCode() == target){
-                dest = airport.second;
-            }
+        double distance = 1;  // chamar função para calcular distância
+        if (src && dest && air) {
+            Travels.addEdge(*src, *dest, distance, *air);
+        } else {
+            cerr << "Error: Airport or Airline not found for a flight." << endl;
         }
-        Airline* air;
-        for(auto & airline1 : airlines){
-            if(airline1.second->getCode() == airline){
-                 air = airline1.second;
-            }
-        }
-        double distance = 1;
-        //distance = chamar função para calcular distância
-        Travels.addEdge(*src, *dest, distance,*air);
     }
 }
 
