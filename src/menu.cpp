@@ -75,7 +75,7 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
 
 void menu::mainMenu(){
     int size = 4, select = 0;
-    vector <string> options = {"Statistics ", "Best Flight Option", "Coisa ", "QUIT "};
+    vector <string> options = {"Statistics ", "Best Flight Option", "Search With Filters", "QUIT "};
     nonBlockingEntrance();
     auxprintMenu(options, size, select, "Menu");
     restoreEntrace();
@@ -86,10 +86,10 @@ void menu::mainMenu(){
             break;
         case 1:
             menuAirports();
-            wait();
+            //wait();
             break;
         case 2:
-            cout << "wayayayayyayay" << endl;
+            menuAirports();
             break;
         case 3:
             cout << "GOOD BYE ;)" << endl;
@@ -298,8 +298,8 @@ void menu::menuFlightStatistics(){
 
 }
 void menu::menuAirports() {
-    int size = 2, select = 0;
-    vector <string> options = {"Source and Destiny", "Go back"};
+    int size = 3, select = 0;
+    vector <string> options = {"Source and Destiny","Search With Filters", "Go back"};
     nonBlockingEntrance();
     auxprintMenu(options, size, select, "Menu Airports");
     restoreEntrace();
@@ -311,6 +311,16 @@ void menu::menuAirports() {
             wait();
             break;}
         case 1:
+        {
+            string airlineStr;
+            cin >> airlineStr;
+            vector<Airport*> srcAirports = SelectAirportSrc();
+            vector<Airport*> destAirports = SelectAirportDest();
+            Airline* airline = airlines[airlineStr];
+            findBestFlightOptionWithFilters(srcAirports, destAirports, airline);
+            wait();
+            break;}
+        case 2:
             mainMenu();
             break;
     }
@@ -806,6 +816,27 @@ vector<Airport*> menu::UsingLocation(double latitude, double longitude) {
 void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports) {
     vector<vector<Vertex<Airport>*>> bestPaths;
     size_t minStops = numeric_limits<size_t>::max();
+
+    for (auto srcAirport : srcAirports) {
+        for (auto destAirport : destAirports) {
+            vector<Vertex<Airport>*> currentPath = findMinStopsTripHelper(srcAirport, destAirport);
+
+            if (currentPath.size() < minStops) {
+                minStops = currentPath.size();
+                bestPaths = {move(currentPath)};
+            } else if (currentPath.size() == minStops) {
+                bestPaths.push_back(move(currentPath));
+            }
+        }
+    }
+
+    printBestFlights(bestPaths);
+}
+
+void menu::findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports, Airline* airline) {
+    vector<vector<Vertex<Airport>*>> bestPaths;
+    size_t minStops = numeric_limits<size_t>::max();
+
 
     for (auto srcAirport : srcAirports) {
         for (auto destAirport : destAirports) {
