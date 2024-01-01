@@ -190,6 +190,7 @@ void menu:: menuAirportStatistics(){
             break;
         case 7:{
             auto x = articulationPoints();
+            sort(x.begin(), x.end());
             cout << "In this network " << x.size() << " airports are essential" << endl;
             cout << "Do you want a full list on the essential Airports?"<< endl << "Enter Yes to access the list:";
             string ans;
@@ -202,6 +203,7 @@ void menu:: menuAirportStatistics(){
     }
 
 }
+
 void menu::menuDestination() {
     int size = 3, select = 0;
     vector <string> options = {"Number of Airports", "Number of Cities", "Number of Countries"};
@@ -917,7 +919,7 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
 }
 
 Graph<Airport> menu :: undirectedGraph(){
-    Graph<Airport> undirectedTRavels;
+    Graph<Airport> undirectedTRavels = Travels;
     for (auto vertex:  Travels.getVertexSet()){
         for(auto edge: vertex-> getAdj()){
             auto destVertex = edge.getDest();
@@ -931,6 +933,7 @@ Graph<Airport> menu :: undirectedGraph(){
                 Edge<Airport> k = Edge(vertex, 0, a );
                 auto adj = destVertex->getAdj();
                 adj.push_back(k);
+                destVertex->setAdj(adj);
             }
         }
     }
@@ -940,14 +943,14 @@ Graph<Airport> menu :: undirectedGraph(){
 
 vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
-    //Graph<Airport> undirectedTRavels = undirectedGraph();
-    for (auto v : Travels.getVertexSet()){
+    Graph<Airport> undirectedTravels = undirectedGraph();
+    for (auto v : undirectedTravels.getVertexSet()){
         v->setProcessing(false);
         v->setLow(0);
         v->setNum(0);
     }
     int dTime = 1;
-    for (auto v : Travels.getVertexSet())
+    for (auto v : undirectedTravels.getVertexSet())
         if (! v->isVisited()){
             auxArticulationPoints(v, articulation, dTime);
         }

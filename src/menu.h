@@ -69,6 +69,7 @@ class menu {
         }
     };
     Graph<Airport> undirectedGraph();
+    bool sortair(Airport a1, Airport a2);
 };
 
 
