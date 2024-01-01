@@ -814,7 +814,6 @@ void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) c
         for (size_t i = 0; i < path.size() - 1; ++i) {
             string src = path[i]->getInfo().getCode();
             string dest = path[i + 1]->getInfo().getCode();
-            Airline* airline = nullptr;
 
             for (auto u : Travels.getVertexSet()) {
                 if (u->getInfo().getCode() == src) {
@@ -822,16 +821,12 @@ void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) c
                         if (edge.getDest()->getInfo().getCode() == dest) {
                             auto it = airlines.find(edge.getAirline().getCode());
                             if (it != airlines.end()) {
-                                airline = it->second;
+                                Flights flight(src, dest, *it->second);
+                                cout << "From: " << flight.getsrc() << " To: " << flight.getdest() << " Airline: " << it->second->getCode() << endl;
                             }
                         }
                     }
                 }
-            }
-
-            if (airline) {
-                Flights flight(src, dest, *airline);
-                cout << "From: " << flight.getsrc() << " To: " << flight.getdest() << " Airline: " << flight.getAirline().getName() << endl;
             }
         }
         cout << "----------------------------" << endl;
