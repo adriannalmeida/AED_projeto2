@@ -125,7 +125,7 @@ void menu::menuStatistics() {
 void menu:: menuAirportStatistics(){
     int size = 9, select = 0;
     vector <string> options = {"Total Nº of Airports", "Nº of Flights per Airport", "Destination countries", "No lay-over flights",
-                               "Destinations with N lay-overs", "função 7 wtf", "Top Airports in traffic capacity","Essential Airports", "Go back"};
+                               "Destinations with N lay-overs", "Longest Trip", "Top Airports in traffic capacity","Essential Airports", "Go back"};
     nonBlockingEntrance();
     auxprintMenu(options,size,select, "Airport Statistics");
     restoreEntrace();
@@ -301,7 +301,7 @@ void menu::menuAirports() {
     int size = 2, select = 0;
     vector <string> options = {"Source and Destiny", "Go back"};
     nonBlockingEntrance();
-    auxprintMenu(options, size, select);
+    auxprintMenu(options, size, select, "Menu Airports");
     restoreEntrace();
     switch (select){
         case 0:
@@ -319,7 +319,7 @@ vector<Airport*> menu::SelectAirportSrc() {
     int size = 4, select = 0;
     vector <string> options = {"Airport code", "Airport name", "City", "Coordenates"};
     nonBlockingEntrance();
-    auxprintMenu(options, size, select);
+    auxprintMenu(options, size, select, "Source");
     restoreEntrace();
 
     vector<Airport*> selectedAirports;
@@ -359,7 +359,7 @@ vector<Airport*> menu::SelectAirportDest() {
     int size = 4, select = 0;
     vector <string> options = {"Airport code", "Airport name", "City", "Coordenates"};
     nonBlockingEntrance();
-    auxprintMenu(options, size, select);
+    auxprintMenu(options, size, select, "Dest");
     restoreEntrace();
 
     vector<Airport*> selectedAirports;
