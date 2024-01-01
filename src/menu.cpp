@@ -182,6 +182,7 @@ void menu:: menuAirportStatistics(){
             wait();
             break;
         case 6:
+            cout << "Enter the number of Airports: " << endl;
             int cin1;
             cin >> cin1;
             TopAirportsintrafficcapacity(cin1);
@@ -518,7 +519,7 @@ void menu::directFlights() {
         auto country = find(destCountries.begin(), destCountries.end(), adest.getCountry().getCountryName());
         if (country == destCountries.end())
             destCountries.push_back(adest.getCountry().getCountryName());
-        auto airport = find(destAirports.begin(), destAirports.end(), adest.getCode());
+        auto airport = find(destAirports.begin(), destAirports.end(), adest.getName());
         if (airport == destAirports.end())
             destAirports.push_back(adest.getName());
     }
@@ -532,6 +533,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destCountries.begin(), destCountries.end());
                 for (auto x: destCountries) {
                     cout << x << endl;
                 }
@@ -545,6 +547,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destCities.begin(), destCities.end());
                 for (auto x: destCities) {
                     cout << x << endl;
                 }
@@ -558,6 +561,7 @@ void menu::directFlights() {
             cin >> ans; transform(ans.begin(), ans.end(), ans.begin(), ::tolower);
             if(ans == "yes"){
                 cout << endl;
+                sort(destAirports.begin(), destAirports.end());
                 for (auto y: destAirports) {
                     cout << y << endl;
                 }
@@ -610,19 +614,14 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
     if (stop == 0) {
         return 0;
     }
-
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
-                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
+            airportGraph.addVertex(u.getDest()->getInfo());
+            NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
+            visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
         }
     }
-
     return visitedCountries.size();
 }
 
