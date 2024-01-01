@@ -182,7 +182,6 @@ void menu:: menuAirportStatistics(){
             wait();
             break;
         case 6:
-            cout << "Enter the number of Airports: " << endl;
             int cin1;
             cout << "Enter the number of airports you want to see: " << endl;
             cin >> cin1;
