@@ -916,11 +916,31 @@ double menu::haversineDistance(double lat1, double lon1, double lat2, double lon
     return rad * c;
 }
 
+Graph<Airport> menu :: undirectedGraph(){
+    Graph<Airport> undirectedTRavels;
+    for (auto vertex:  Travels.getVertexSet()){
+        for(auto edge: vertex-> getAdj()){
+            auto destVertex = edge.getDest();
+            int f = 0;
+            for (auto v: destVertex->getAdj()){
+                if(v.getDest() == vertex)
+                    f = 1;
+            }
+            if(f == 0){
+                Airline a;
+                Edge<Airport> k = Edge(vertex, 0, a );
+                auto adj = destVertex->getAdj();
+                adj.push_back(k);
+            }
+        }
+    }
+    return undirectedTRavels;
+}
 
-//>>>>>>> master
 
-vector<Airport> menu::articulationPoints() const {
+vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
+    //Graph<Airport> undirectedTRavels = undirectedGraph();
     for (auto v : Travels.getVertexSet()){
         v->setProcessing(false);
         v->setLow(0);

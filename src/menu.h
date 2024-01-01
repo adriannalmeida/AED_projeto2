@@ -49,7 +49,7 @@ class menu {
     int NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities);
     int NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries);
     void findMaxStopsTrip();
-    vector<Airport> articulationPoints() const;
+    vector<Airport> articulationPoints();
     void auxArticulationPoints(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
     //void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
     void auxMaxStop(Vertex<Airport> *v, int &maxStops, int &temp, vector<pair<string, string>>& vetor);
@@ -68,6 +68,7 @@ class menu {
             return lhs->getDistance() > rhs->getDistance();
         }
     };
+    Graph<Airport> undirectedGraph();
 };
 
 
