@@ -74,8 +74,8 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
 }
 
 void menu::mainMenu(){
-    int size = 4, select = 0;
-    vector <string> options = {"Statistics ", "Best Flight Option", "Search With Filters", "QUIT "};
+    int size = 3, select = 0;
+    vector <string> options = {"Statistics ", "Best Flight Option", "QUIT "};
     nonBlockingEntrance();
     auxprintMenu(options, size, select, "Menu");
     restoreEntrace();
@@ -89,9 +89,6 @@ void menu::mainMenu(){
             //wait();
             break;
         case 2:
-            menuAirports();
-            break;
-        case 3:
             cout << "GOOD BYE ;)" << endl;
             return;
     }
@@ -843,7 +840,7 @@ void menu::findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, 
                 if (stops <= minStops) {
                     if (stops < minStops) {
                         minStops = stops;
-                        allPaths.clear();
+                        bestPaths.clear();
                     }
 
                     bestPaths.insert(currentPath);
@@ -934,6 +931,7 @@ void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& best
                             if (it != airlines.end() && it->second == airline) {
                                 Flights flight(src, dest, *it->second);
                                 flights.push_back(flight);
+                                break;
                             }
                             else if(it != airlines.end() && it->second != airline){
                                 flights.clear();
@@ -943,10 +941,9 @@ void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& best
                 }
             }
         }
-
-    }
-    for(auto i : flights){
-        cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        for(auto i : flights) {
+            cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        }
     }
     cout << "----------------------------" << endl;
 }
@@ -990,7 +987,6 @@ Graph<Airport> menu :: undirectedGraph(){
     return undirectedTRavels;
 }
 
-//vector<Airport> menu::articulationPoints() const {
 vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
     Graph<Airport> undirectedTravels = undirectedGraph();
