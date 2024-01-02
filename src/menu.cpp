@@ -931,19 +931,21 @@ void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& best
                             if (it != airlines.end() && it->second == airline) {
                                 Flights flight(src, dest, *it->second);
                                 flights.push_back(flight);
+                                break;
+                            }
+                            else if(it != airlines.end() && it->second != airline){
+                                flights.clear();
                             }
                         }
                     }
                 }
             }
-
         }
-
-    }for(auto i : flights){
-        cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        for(auto i : flights) {
+            cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        }
     }
     cout << "----------------------------" << endl;
-
 }
 
 double menu::haversineDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -985,7 +987,6 @@ Graph<Airport> menu :: undirectedGraph(){
     return undirectedTRavels;
 }
 
-//vector<Airport> menu::articulationPoints() const {
 vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
     Graph<Airport> undirectedTravels = undirectedGraph();
