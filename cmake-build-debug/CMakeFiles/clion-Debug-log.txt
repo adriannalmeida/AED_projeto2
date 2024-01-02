@@ -8,6 +8,7 @@ CMake Deprecation Warning:
   use the cmake-file-api(7) to view CMake-generated project build trees.
 
 
+
 -- Found Doxygen: /usr/bin/doxygen (found version "1.9.4") found components: doxygen missing components: dot
 CMake Error: File /home/adriana/2leic/AED/Project_AED_pt2/documentation/Doxyfile does not exist.
 CMake Error at CMakeLists.txt:32 (configure_file):

@@ -18,6 +18,7 @@ public:
     * @param airline object Airline associated.
     */
     Flights(string src, string dest, Airline airline);
+
     /**
     * @brief Getter function for the source airport code.
      * Complexity: O(1)
@@ -36,6 +37,10 @@ public:
     * @return Airline
     */
     Airline getAirline() const;
+
+    //string getsrc();
+    //string getdest();
+    //Airline getAirline();
 };
 
 

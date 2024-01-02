@@ -74,8 +74,8 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
 }
 
 void menu::mainMenu(){
-    int size = 4, select = 0;
-    vector <string> options = {"Statistics ", "Best Flight Option", "Search With Filters", "QUIT "};
+    int size = 3, select = 0;
+    vector <string> options = {"Statistics ", "Best Flight Option", "QUIT "};
     nonBlockingEntrance();
     auxprintMenu(options, size, select, "Menu");
     restoreEntrace();
@@ -89,9 +89,6 @@ void menu::mainMenu(){
             //wait();
             break;
         case 2:
-            menuAirports();
-            break;
-        case 3:
             cout << "GOOD BYE ;)" << endl;
             return;
     }
@@ -583,18 +580,14 @@ int menu::NumberofStopsairports(string airport, int stop, Graph<Airport>& airpor
         return 0;
     }
 
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!airportGraph.findVertex(u.getDest()->getInfo())){
-                    count++;
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    count += NumberofStopsairports(u.getDest()->getInfo().getCode(), stop - 1, airportGraph);
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!airportGraph.findVertex(u.getDest()->getInfo())){
+            count++;
+            airportGraph.addVertex(u.getDest()->getInfo());
+            count += NumberofStopsairports(u.getDest()->getInfo().getCode(), stop - 1, airportGraph);
         }
     }
-
     return count;
 }
 
@@ -603,15 +596,12 @@ int menu::NumberofStopscities(string airport, int stop, Graph<Airport>& airportG
         return 0;
     }
 
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!visitedCities.count(u.getDest()->getInfo().getCountry().getCountryName())){
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
-                    visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!visitedCities.count(u.getDest()->getInfo().getCountry().getCity())){
+            airportGraph.addVertex(u.getDest()->getInfo());
+            NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
+            visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
         }
     }
 
@@ -622,6 +612,7 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
     if (stop == 0) {
         return 0;
     }
+
     auto i = Travels.findVertex(*airports[airport]);
     for (auto u : i->getAdj()) {
         if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
@@ -811,95 +802,95 @@ vector<Airport*> menu::UsingLocation(double latitude, double longitude) {
     return closestAirports;
 }
 void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports) {
-    vector<vector<Vertex<Airport>*>> bestPaths;
+    set<vector<Vertex<Airport>*>> allPaths;
     size_t minStops = numeric_limits<size_t>::max();
 
     for (auto srcAirport : srcAirports) {
         for (auto destAirport : destAirports) {
-            vector<Vertex<Airport>*> currentPath = findMinStopsTripHelper(srcAirport, destAirport);
+            vector<vector<Vertex<Airport>*>> currentPaths = findMinStopsTripHelper(srcAirport, destAirport);
+            for (const auto& currentPath : currentPaths) {
+                size_t stops = currentPath.size() - 1; // Stops are one less than the number of vertices
 
-            if (currentPath.size() < minStops) {
-                minStops = currentPath.size();
-                bestPaths = {move(currentPath)};
-            } else if (currentPath.size() == minStops) {
-                bestPaths.push_back(move(currentPath));
+                if (stops <= minStops) {
+                    if (stops < minStops) {
+                        minStops = stops;
+                        allPaths.clear();
+                    }
+
+                    allPaths.insert(currentPath);
+                }
             }
         }
     }
-
-    printBestFlights(bestPaths);
+    printBestFlights(allPaths);
 }
 
+
 void menu::findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports, Airline* airline) {
-    vector<vector<Vertex<Airport>*>> bestPaths;
+    set<vector<Vertex<Airport>*>> bestPaths;
     size_t minStops = numeric_limits<size_t>::max();
 
 
     for (auto srcAirport : srcAirports) {
         for (auto destAirport : destAirports) {
-            vector<Vertex<Airport>*> currentPath = findMinStopsTripHelper(srcAirport, destAirport);
+            vector<vector<Vertex<Airport>*>> currentPaths = findMinStopsTripHelper(srcAirport, destAirport);
+            for (const auto& currentPath : currentPaths) {
+                size_t stops = currentPath.size() - 1; // Stops are one less than the number of vertices
 
-            if (currentPath.size() < minStops) {
-                minStops = currentPath.size();
-                bestPaths = {move(currentPath)};
-            } else if (currentPath.size() == minStops) {
-                bestPaths.push_back(move(currentPath));
+                if (stops <= minStops) {
+                    if (stops < minStops) {
+                        minStops = stops;
+                        bestPaths.clear();
+                    }
+
+                    bestPaths.insert(currentPath);
+                }
             }
         }
     }
 
     printBestFlightsWithFilters(bestPaths, airline);
 }
-vector<Vertex<Airport> *> menu::findMinStopsTripHelper(Airport* src, Airport* dest) {
-    priority_queue<Vertex<Airport>*, vector<Vertex<Airport>*>, CompareDist<Airport>> pq;
+
+
+vector<vector<Vertex<Airport>*>> menu::findMinStopsTripHelper(Airport *src, Airport *dest) {
+    vector<vector<Vertex<Airport>*>> allPaths;
+    stack<pair<Vertex<Airport>*, vector<Vertex<Airport>*>>> s;
     unordered_set<Vertex<Airport>*> visited;
 
-    // Reset distances and previous pointers
-    for (auto vertex : Travels.getVertexSet()) {
-        vertex->setDistance(numeric_limits<double>::infinity());
-        vertex->setPrevious(nullptr);
-    }
+    s.push({Travels.findVertex(*src), {}});
 
-    Travels.findVertex(*src)->setDistance(0);
-    pq.push(Travels.findVertex(*src));
+    while (!s.empty()) {
+        auto currentPair = s.top();
+        s.pop();
 
-    while (!pq.empty()) {
-        Vertex<Airport>* current = pq.top();
-        pq.pop();
-
+        Vertex<Airport>* current = currentPair.first;
+        vector<Vertex<Airport>*> pathSoFar = currentPair.second;
+        pathSoFar.push_back(current);
         if (current->getInfo() == *dest) {
-            break;
+            allPaths.push_back(pathSoFar);
+            continue;
         }
 
-        if (visited.count(current) == 0) {
-            visited.insert(current);
+        // Mark the current vertex as visited
+        visited.insert(current);
 
-            for (const Edge<Airport>& edge : current->getAdj()) {
-                Vertex<Airport>* neighbor = edge.getDest();
-                double newDistance = current->getDistance() + edge.getDistance();
+        for (const Edge<Airport>& edge : current->getAdj()) {
+            Vertex<Airport>* neighbor = edge.getDest();
 
-                if (newDistance < neighbor->getDistance()) {
-                    neighbor->setDistance(newDistance);
-                    neighbor->setPrevious(current);
-                    pq.push(neighbor);
-                }
+            // Check if the neighbor is already visited to avoid redundant exploration
+            if (visited.count(neighbor) == 0) {
+                s.push({neighbor, pathSoFar}); // Push the neighbor and the current path
             }
         }
     }
 
-    vector<Vertex<Airport>*> shortestPath;
-    Vertex<Airport>* current = Travels.findVertex(*dest);
-    while (current != nullptr) {
-        shortestPath.insert(shortestPath.begin(), current);
-        current = current->getPrevious();
-    }
-
-    return shortestPath;
+    return allPaths;
 }
 
-void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) const {
-    cout << "Best Flight Options:" << endl;
 
+void menu::printBestFlights(const set<vector<Vertex<Airport>*>>& bestPaths) const {
+    cout << "Best Flight Options:" << endl;
     for (const auto& path : bestPaths) {
         for (size_t i = 0; i < path.size() - 1; ++i) {
             string src = path[i]->getInfo().getCode();
@@ -924,7 +915,7 @@ void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) c
 }
 
 
-void menu::printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& bestPaths, Airline* airline) const {
+void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& bestPaths, Airline* airline) const {
     cout << "Best Flight Options:" << endl;
     vector<Flights> flights;
     for (const auto& path : bestPaths) {
@@ -940,6 +931,7 @@ void menu::printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& b
                             if (it != airlines.end() && it->second == airline) {
                                 Flights flight(src, dest, *it->second);
                                 flights.push_back(flight);
+                                break;
                             }
                             else if(it != airlines.end() && it->second != airline){
                                 flights.clear();
@@ -949,10 +941,9 @@ void menu::printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& b
                 }
             }
         }
-
-    }
-    for(auto i : flights){
-        cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        for(auto i : flights) {
+            cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
+        }
     }
     cout << "----------------------------" << endl;
 }
@@ -996,7 +987,6 @@ Graph<Airport> menu :: undirectedGraph(){
     return undirectedTRavels;
 }
 
-//vector<Airport> menu::articulationPoints() const {
 vector<Airport> menu::articulationPoints() {
     vector<Airport> articulation;
     Graph<Airport> undirectedTravels = undirectedGraph();
