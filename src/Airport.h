@@ -20,6 +20,7 @@ public:
     Country getCountry();
     Coordinates getCoordinates();
     bool operator==(const Airport& other) const;
+    bool operator < (const Airport &other) const;
 
 };
 

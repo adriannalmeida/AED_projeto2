@@ -24,3 +24,9 @@ Coordinates Airport::getCoordinates() {
 bool Airport::operator==(const Airport& other) const {
     return (code == other.code) && (name == other.name);
 }
+
+bool Airport::operator < (const Airport &other) const {
+    if(name < other.name)
+        return true;
+    return false;
+}

@@ -12,6 +12,7 @@
 #include <unordered_set>
 #include <cmath>
 #include <cctype>
+#include <iomanip>
 using namespace std;
 
 class menu {
@@ -32,12 +33,13 @@ class menu {
     vector<Airport*> SelectAirportDest();
     void EssencialAirports();
     int NumberofAirports();
-    int DifferentFlightsto(Airport& airport);
+    set<string> DifferentFlightsto(Airport& airport);
     void TopAirportsintrafficcapacity(int n);
     int NumberofFlights();
+
     int FlightsoutofAirport(Airport& Flightsout, int& airlines);
-    void printMenu(vector<string> options, int size, int select);
-    void auxprintMenu(vector<string> options, int & size, int &select);
+    void printMenu(vector<string> options, int size, int select, string menuName);
+    void auxprintMenu(vector<string> options, int & size, int &select, string menuName);
     void nonBlockingEntrance();
     void restoreEntrace();
     int NumberofFlightspercity(string city);
@@ -48,23 +50,29 @@ class menu {
     int NumberofStopscities(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCities);
     int NumberofStopscountries(string airport, int stop, Graph<Airport>& airportGraph, unordered_set<string>& visitedCountries);
     void findMaxStopsTrip();
-    vector<Airport> articulationPoints() const;
+    vector<Airport> articulationPoints();
+    void auxArticulationPoints(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
+    //void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
+    void auxMaxStop(Vertex<Airport> *v, int &maxStops, int &temp, vector<pair<string, string>>& vetor);
     void aux(Vertex<Airport> *v, vector<Airport> & articulation,int dTime) const;
     void findMaxStopsTripHelper(Vertex<Airport> *currentAirport, int &maxStops, vector<pair<string, string>> &currentTrip, set<pair<string, string>> &printedTrips, unordered_set<string> &visitedAirports);
     Airport* UsingAirport(string airport);
     vector<Airport*> UsingCity(const string& city);
     vector<Airport*> UsingLocation(double latitude, double longitude);
     void findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports);
+    void findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports, Airline* airline);
     vector<vector<Vertex<Airport>*>> findMinStopsTripHelper(Airport* src, Airport* dest);
     void printBestFlights(const set<vector<Vertex<Airport>*>>& bestPaths) const;
+    void printBestFlightsWithFilters(const vector<vector<Vertex<Airport>*>>& bestPaths, Airline* airline) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2);
-
     template<typename T>
     struct CompareDist {
         bool operator()(const Vertex<T>* lhs, const Vertex<T>* rhs) const {
             return lhs->getDistance() > rhs->getDistance();
         }
     };
+    Graph<Airport> undirectedGraph();
+    bool sortair(Airport a1, Airport a2);
 };
 
 
