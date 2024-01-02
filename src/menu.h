@@ -55,7 +55,7 @@ class menu {
     vector<Airport*> UsingCity(const string& city);
     vector<Airport*> UsingLocation(double latitude, double longitude);
     void findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports);
-    vector<Vertex<Airport> *> findMinStopsTripHelper(Airport* src, Airport* dest);
+    vector<vector<Vertex<Airport>*>> findMinStopsTripHelper(Airport* src, Airport* dest);
     void printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2);
 

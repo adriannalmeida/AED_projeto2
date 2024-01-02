@@ -536,18 +536,14 @@ int menu::NumberofStopsairports(string airport, int stop, Graph<Airport>& airpor
         return 0;
     }
 
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!airportGraph.findVertex(u.getDest()->getInfo())){
-                    count++;
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    count += NumberofStopsairports(u.getDest()->getInfo().getCode(), stop - 1, airportGraph);
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!airportGraph.findVertex(u.getDest()->getInfo())){
+            count++;
+            airportGraph.addVertex(u.getDest()->getInfo());
+            count += NumberofStopsairports(u.getDest()->getInfo().getCode(), stop - 1, airportGraph);
         }
     }
-
     return count;
 }
 
@@ -556,15 +552,12 @@ int menu::NumberofStopscities(string airport, int stop, Graph<Airport>& airportG
         return 0;
     }
 
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!visitedCities.count(u.getDest()->getInfo().getCountry().getCountryName())){
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
-                    visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!visitedCities.count(u.getDest()->getInfo().getCountry().getCity())){
+            airportGraph.addVertex(u.getDest()->getInfo());
+            NumberofStopscities(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCities);
+            visitedCities.insert(u.getDest()->getInfo().getCountry().getCity());
         }
     }
 
@@ -576,15 +569,12 @@ int menu::NumberofStopscountries(string airport, int stop, Graph<Airport>& airpo
         return 0;
     }
 
-    for (auto i : Travels.getVertexSet()) {
-        if (i->getInfo().getCode() == airport) {
-            for (auto u : i->getAdj()) {
-                if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
-                    airportGraph.addVertex(u.getDest()->getInfo());
-                    NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
-                    visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
-                }
-            }
+    auto i = Travels.findVertex(*airports[airport]);
+    for (auto u : i->getAdj()) {
+        if(!visitedCountries.count(u.getDest()->getInfo().getCountry().getCountryName())){
+            airportGraph.addVertex(u.getDest()->getInfo());
+            NumberofStopscountries(u.getDest()->getInfo().getCode(), stop - 1, airportGraph, visitedCountries);
+            visitedCountries.insert(u.getDest()->getInfo().getCountry().getCountryName());
         }
     }
 
@@ -742,74 +732,69 @@ vector<Airport*> menu::UsingLocation(double latitude, double longitude) {
     return closestAirports;
 }
 void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports) {
-    vector<vector<Vertex<Airport>*>> bestPaths;
+    vector<vector<Vertex<Airport>*>> allPaths;
     size_t minStops = numeric_limits<size_t>::max();
 
     for (auto srcAirport : srcAirports) {
         for (auto destAirport : destAirports) {
-            vector<Vertex<Airport>*> currentPath = findMinStopsTripHelper(srcAirport, destAirport);
+            vector<vector<Vertex<Airport>*>> currentPaths = findMinStopsTripHelper(srcAirport, destAirport);
+            for (const auto& currentPath : currentPaths) {
+                size_t stops = currentPath.size() - 1; // Stops are one less than the number of vertices
 
-            if (currentPath.size() < minStops) {
-                minStops = currentPath.size();
-                bestPaths = {move(currentPath)};
-            } else if (currentPath.size() == minStops) {
-                bestPaths.push_back(move(currentPath));
-            }
-        }
-    }
+                if (stops <= minStops) {
+                    if (stops < minStops) {
+                        minStops = stops;
+                        allPaths.clear();
+                    }
 
-    printBestFlights(bestPaths);
-}
-vector<Vertex<Airport> *> menu::findMinStopsTripHelper(Airport* src, Airport* dest) {
-    priority_queue<Vertex<Airport>*, vector<Vertex<Airport>*>, CompareDist<Airport>> pq;
-    unordered_set<Vertex<Airport>*> visited;
-
-    // Reset distances and previous pointers
-    for (auto vertex : Travels.getVertexSet()) {
-        vertex->setDistance(numeric_limits<double>::infinity());
-        vertex->setPrevious(nullptr);
-    }
-
-    Travels.findVertex(*src)->setDistance(0);
-    pq.push(Travels.findVertex(*src));
-
-    while (!pq.empty()) {
-        Vertex<Airport>* current = pq.top();
-        pq.pop();
-
-        if (current->getInfo() == *dest) {
-            break;
-        }
-
-        if (visited.count(current) == 0) {
-            visited.insert(current);
-
-            for (const Edge<Airport>& edge : current->getAdj()) {
-                Vertex<Airport>* neighbor = edge.getDest();
-                double newDistance = current->getDistance() + edge.getDistance();
-
-                if (newDistance < neighbor->getDistance()) {
-                    neighbor->setDistance(newDistance);
-                    neighbor->setPrevious(current);
-                    pq.push(neighbor);
+                    allPaths.push_back(currentPath);
                 }
             }
         }
     }
+    cout << allPaths.size();
+    printBestFlights(allPaths);
+}
 
-    vector<Vertex<Airport>*> shortestPath;
-    Vertex<Airport>* current = Travels.findVertex(*dest);
-    while (current != nullptr) {
-        shortestPath.insert(shortestPath.begin(), current);
-        current = current->getPrevious();
+vector<vector<Vertex<Airport>*>> menu::findMinStopsTripHelper(Airport *src, Airport *dest) {
+    vector<vector<Vertex<Airport>*>> allPaths;
+    stack<pair<Vertex<Airport>*, vector<Vertex<Airport>*>>> s; // Stack to store the current vertex and its path
+    unordered_set<Vertex<Airport>*> visited; // Set to keep track of visited vertices
+
+    // Perform DFS
+    s.push({Travels.findVertex(*src), {}});
+
+    while (!s.empty()) {
+        auto currentPair = s.top();
+        s.pop();
+
+        Vertex<Airport>* current = currentPair.first;
+        vector<Vertex<Airport>*> pathSoFar = currentPair.second;
+        pathSoFar.push_back(current);
+        if (current->getInfo() == *dest) {
+            allPaths.push_back(pathSoFar);
+            continue;
+        }
+
+        // Mark the current vertex as visited
+        visited.insert(current);
+
+        for (const Edge<Airport>& edge : current->getAdj()) {
+            Vertex<Airport>* neighbor = edge.getDest();
+
+            // Check if the neighbor is already visited to avoid redundant exploration
+            if (visited.count(neighbor) == 0) {
+                s.push({neighbor, pathSoFar}); // Push the neighbor and the current path
+            }
+        }
     }
 
-    return shortestPath;
+    return allPaths;
 }
+
 
 void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) const {
     cout << "Best Flight Options:" << endl;
-
     for (const auto& path : bestPaths) {
         for (size_t i = 0; i < path.size() - 1; ++i) {
             string src = path[i]->getInfo().getCode();
