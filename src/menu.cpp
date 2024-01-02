@@ -276,7 +276,7 @@ void menu::menuFlightStatistics(){
                 string air;
             cin >> air;
             int count = NumberofFlightsperairline(air);
-            cout << air << " has a total of  \033[1;31m" << count << "\033[0m"<< endl;
+            cout << air << " has a total of \033[1;31m" << count << "\033[0m"<< endl;
             wait();
             break;}
         case 3:
@@ -284,10 +284,10 @@ void menu::menuFlightStatistics(){
             string air;
             cout << "Enter the City of interest: " << endl;
             getline(cin, city);
-            cout << "Enter the Airline of interest: " << endl;
+            cout << "Enter the code for the airline of interest: " << endl;
             cin >> air;
             int count = NumberofFlightsperCityandAir(city, air);
-            cout << city << " has a total of  \033[1;31m" << count << "\033[0m "<< air << "flights" << endl;;
+            cout << city << " has a total of  \033[1;31m" << count << "\033[0m "<< air << " flights" << endl;;
             wait();
             break;}
         case 4:
