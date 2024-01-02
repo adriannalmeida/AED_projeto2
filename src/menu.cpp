@@ -732,7 +732,7 @@ vector<Airport*> menu::UsingLocation(double latitude, double longitude) {
     return closestAirports;
 }
 void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vector<Airport*>& destAirports) {
-    vector<vector<Vertex<Airport>*>> allPaths;
+    set<vector<Vertex<Airport>*>> allPaths;
     size_t minStops = numeric_limits<size_t>::max();
 
     for (auto srcAirport : srcAirports) {
@@ -747,7 +747,7 @@ void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vecto
                         allPaths.clear();
                     }
 
-                    allPaths.push_back(currentPath);
+                    allPaths.insert(currentPath);
                 }
             }
         }
@@ -758,10 +758,9 @@ void menu::findBestFlightOption(const vector<Airport*>& srcAirports, const vecto
 
 vector<vector<Vertex<Airport>*>> menu::findMinStopsTripHelper(Airport *src, Airport *dest) {
     vector<vector<Vertex<Airport>*>> allPaths;
-    stack<pair<Vertex<Airport>*, vector<Vertex<Airport>*>>> s; // Stack to store the current vertex and its path
-    unordered_set<Vertex<Airport>*> visited; // Set to keep track of visited vertices
+    stack<pair<Vertex<Airport>*, vector<Vertex<Airport>*>>> s;
+    unordered_set<Vertex<Airport>*> visited;
 
-    // Perform DFS
     s.push({Travels.findVertex(*src), {}});
 
     while (!s.empty()) {
@@ -793,7 +792,7 @@ vector<vector<Vertex<Airport>*>> menu::findMinStopsTripHelper(Airport *src, Airp
 }
 
 
-void menu::printBestFlights(const vector<vector<Vertex<Airport>*>>& bestPaths) const {
+void menu::printBestFlights(const set<vector<Vertex<Airport>*>>& bestPaths) const {
     cout << "Best Flight Options:" << endl;
     for (const auto& path : bestPaths) {
         for (size_t i = 0; i < path.size() - 1; ++i) {
