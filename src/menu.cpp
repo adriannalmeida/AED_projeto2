@@ -147,7 +147,7 @@ void menu:: menuAirportStatistics(){
             auto a = airports[code];
             int airlines;
             int u = FlightsoutofAirport(*a,airlines);
-            cout << airports[code]->getName() << "has \033[1;31m" << u << "\033[0m possible flights and works with \033[1;31m" << airlines << "\033[0m airlines" << endl;
+            cout << airports[code]->getName() << " has \033[1;31m" << u << "\033[0m possible flights and works with \033[1;31m" << airlines << "\033[0m airlines" << endl;
             wait();
             break;}
         case 2:{
@@ -249,15 +249,12 @@ void menu::menuDestination() {
             cout << n << endl;
             wait();
             break;}
-
-        //case 3:
-            //menuAirportStatistics();
     }
 
 }
 void menu::menuFlightStatistics(){
-    int size = 6, select = 0;
-    vector <string> options = {"Total Flights", "Flights per City", "Flights per Airline", "Flights per City and Airline" ,"Flights from City X","Go back"};
+    int size = 5, select = 0;
+    vector <string> options = {"Total Flights", "Flights per City", "Flights per Airline", "Flights per City and Airline" ,"Go back"};
     nonBlockingEntrance();
     auxprintMenu(options,size,select, "Flight Statistics");
     restoreEntrace();
@@ -268,35 +265,32 @@ void menu::menuFlightStatistics(){
             break;
         case 1:
             {string city;
-            cout << "Enter the city of interest:" << endl;
+            cout << "Enter the city of interest: ";
             getline(cin, city);
             int count = NumberofFlightspercity(city);
-            cout  << count << endl;
+            cout  << city <<" has \033[1;31m" << count << "\033[0m total flights (in and out) " << endl;
             wait();
             break;}
         case 2:
-            {string air;
+            {cout << "Enter the code for the airline of interest: ";
+                string air;
             cin >> air;
             int count = NumberofFlightsperairline(air);
-            cout  << count << endl;
+            cout << air << " has a total of  \033[1;31m" << count << "\033[0m"<< endl;
             wait();
             break;}
         case 3:
             {string city;
             string air;
-            cout << "City:" << endl;
+            cout << "Enter the City of interest: " << endl;
             getline(cin, city);
-            cout << "Airline:" << endl;
+            cout << "Enter the Airline of interest: " << endl;
             cin >> air;
             int count = NumberofFlightsperCityandAir(city, air);
-            cout  << count << endl;
+            cout << city << " has a total of  \033[1;31m" << count << "\033[0m "<< air << "flights" << endl;;
             wait();
             break;}
         case 4:
-            cout << "not implemented" <<  endl;
-            wait();
-            break;
-        case 5:
             menuStatistics();
     }
 
@@ -456,7 +450,6 @@ void menu::wait() {
     cin.get();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     mainMenu();
-    // Chama o mainMenu() após pressionar Enter
 }
 
 int menu::NumberofFlightspercity(string city) {
