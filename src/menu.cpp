@@ -74,8 +74,8 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
 }
 
 void menu::mainMenu(){
-    int size = 4, select = 0;
-    vector <string> options = {"Statistics ", "Best Flight Option", "Search With Filters", "QUIT "};
+    int size = 3, select = 0;
+    vector <string> options = {"Statistics ", "Best Flight Option", "QUIT "};
     nonBlockingEntrance();
     auxprintMenu(options, size, select, "Menu");
     restoreEntrace();
@@ -89,9 +89,6 @@ void menu::mainMenu(){
             //wait();
             break;
         case 2:
-            menuAirports();
-            break;
-        case 3:
             cout << "GOOD BYE ;)" << endl;
             return;
     }
@@ -843,7 +840,7 @@ void menu::findBestFlightOptionWithFilters(const vector<Airport*>& srcAirports, 
                 if (stops <= minStops) {
                     if (stops < minStops) {
                         minStops = stops;
-                        allPaths.clear();
+                        bestPaths.clear();
                     }
 
                     bestPaths.insert(currentPath);
@@ -935,20 +932,18 @@ void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& best
                                 Flights flight(src, dest, *it->second);
                                 flights.push_back(flight);
                             }
-                            else if(it != airlines.end() && it->second != airline){
-                                flights.clear();
-                            }
                         }
                     }
                 }
             }
+
         }
 
-    }
-    for(auto i : flights){
+    }for(auto i : flights){
         cout << "From: " << i.getsrc() << " To: " << i.getdest() << endl;
     }
     cout << "----------------------------" << endl;
+
 }
 
 double menu::haversineDistance(double lat1, double lon1, double lat2, double lon2) {
