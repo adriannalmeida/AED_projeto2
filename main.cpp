@@ -1,7 +1,6 @@
 #include <iostream>
 #include <random>
 #include <thread>
-#include <chrono>
 #include "src/menu.h"
 
 
@@ -25,6 +24,7 @@ void loadingAnimation(int durationSeconds) {
 }
 
 int main() {
+    system("clear");
     int durationSeconds = 5;
     std::cout << "                       LOADING...\n";
 

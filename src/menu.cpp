@@ -1,6 +1,5 @@
 #include <limits>
 #include "menu.h"
-#include <algorithm>
 menu:: menu(){}
 void menu::run(){
     DataParser data = DataParser("dataset");
@@ -339,23 +338,53 @@ vector<Airport*> menu::SelectAirportSrc() {
 
     switch (select) {
         case 1: {
-            string airport;
-            cout << "Source:" << endl;
-            cin >> airport;
+            string airport; int f = 1;
+            do {cout << "Enter the source Airport code: ";
+                cin >> airport;
+                f = 1;
+                auto it = airports.find(airport);
+                if (it == airports.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports.push_back(airports[airport]);
             return selectedAirports;
         }
         case 2: {
-            string airport;
+            string airport; int f= 1;
+            unordered_set<string> NA;
+            for(auto x: airports){
+                NA.insert(x.second->getName());
+            }
             cout << "Source:" << endl;
-            cin >> airport;
+            do {cout << "Enter the source Airport name: ";
+                cin >> airport;
+                f = 1;
+                auto it = NA.find(airport);
+                if (it == NA.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports.push_back(UsingAirport(airport));
             return selectedAirports;
         }
         case 3: {
-            string city;
-            cout << "Source City:" << endl;
-            cin >> city;
+            string city; int f= 1;
+            unordered_set<string> NA;
+            for(auto x: airports){
+                NA.insert(x.second->getCountry().getCity());
+            }
+            do {cout << "Enter the source City: ";
+                cin >> city;
+                f = 1;
+                auto it = NA.find(city);
+                if (it == NA.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports = UsingCity(city);
             return selectedAirports;
         }
@@ -394,23 +423,53 @@ vector<Airport*> menu::SelectAirportDest() {
 
     switch (select) {
         case 1: {
-            string airport;
-            cout << "Destiny:" << endl;
-            cin >> airport;
+            string airport; int f = 1;
+            do {cout << "Enter the destination Airport code: ";
+                cin >> airport;
+                f = 1;
+                auto it = airports.find(airport);
+                if (it == airports.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports.push_back(airports[airport]);
             return selectedAirports;
         }
         case 2: {
-            string airport;
-            cout << "Destiny:" << endl;
-            cin >> airport;
+            string airport; int f= 1;
+            unordered_set<string> NA;
+            for(auto x: airports){
+                NA.insert(x.second->getName());
+            }
+            cout << "Source:" << endl;
+            do {cout << "Enter the destination Airport name: ";
+                cin >> airport;
+                f = 1;
+                auto it = NA.find(airport);
+                if (it == NA.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports.push_back(UsingAirport(airport));
             return selectedAirports;
         }
         case 3: {
-            string city;
-            cout << "Destiny City:" << endl;
-            cin >> city;
+            string city; int f= 1;
+            unordered_set<string> NA;
+            for(auto x: airports){
+                NA.insert(x.second->getCountry().getCity());
+            }
+            do {cout << "Enter the destination City: ";
+                cin >> city;
+                f = 1;
+                auto it = NA.find(city);
+                if (it == NA.end()) {
+                    f = 0;
+                    cout << "Invalid code" << endl;
+                }
+            } while (f == 0);
             selectedAirports = UsingCity(city);
             return selectedAirports;
         }
