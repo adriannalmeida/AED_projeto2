@@ -24,23 +24,20 @@ public:
      * Complexity: O(1)
     * @return std::string
     */
-    string getsrc() const;
+    string getsrc();
     /**
     * @brief Getter function for the source airport name.
      * Complexity: O(1)
     * @return std::string
     */
-    string getdest() const;
+    string getdest();
     /**
     * @brief Getter function for the source airline.
      * Complexity: O(1)
     * @return Airline
     */
-    Airline getAirline() const;
+    Airline getAirline();
 
-    //string getsrc();
-    //string getdest();
-    //Airline getAirline();
 };
 
 
