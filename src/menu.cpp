@@ -57,8 +57,8 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
             printMenu(options, size, select, menuName);
             keyStroke = getchar();
             switch (keyStroke){
-                case '\033':  // Tecla de escape, indica que uma sequência de controle está chegando
-                    getchar();  // Descarta o '[' que segue a tecla de escape
+                case '\033':  // Tecla de esc
+                    getchar();  // Descarta o '[' que segue a tecla de esc
                 switch (getchar()) {  // Lê a tecla real
                     case 'A':  // Tecla para cima
                         select = (select - 1 + size) % size;
@@ -69,7 +69,6 @@ void menu:: auxprintMenu(vector<string> options, int & size, int &select, string
                 }
                 break;
             }
-            //usleep(100000);  // Adiciona pequeno atraso
     }while (keyStroke != '\n');  // Enter pressionado
 }
 
@@ -82,11 +81,9 @@ void menu::mainMenu(){
     switch (select){
         case 0:
             menuStatistics();
-           // wait();
             break;
         case 1:
             menuAirports();
-            //wait();
             break;
         case 2:
             cout << "GOOD BYE ;)" << endl;
@@ -770,29 +767,6 @@ void menu::TopAirportsintrafficcapacity(int n) {
     }
 }
 
-//master
-void menu::EssencialAirports(){
-    unordered_set<Vertex<Airport>*> aux;
-
-    for (auto i : Travels.getVertexSet()) {
-        i->setNum(0);
-        i->setVisited(false);
-    }
-
-    cout << "Essential Airports: " << endl;
-
-    for (auto i : Travels.getVertexSet()) {
-        if (!i->isVisited()) {
-            Travels.DFSAUXILIAR(i, aux);
-        }
-    }
-
-    for (auto i : aux) {
-        cout << i->getInfo().getCode() << endl;
-    }
-
-    cout << "Number of airports: " << aux.size() << endl;
-}
 Airport* menu::UsingAirport(string airport){
     for(auto i : Travels.getVertexSet()){
         if (i->getInfo().getName() == airport){
@@ -980,16 +954,12 @@ void menu::printBestFlightsWithFilters(const set<vector<Vertex<Airport>*>>& best
 }
 
 double menu::haversineDistance(double lat1, double lon1, double lat2, double lon2) {
-    // distance between latitudes
-    // and longitudes
     double dLat = (lat2 - lat1) * M_PI / 180.0;
     double dLon = (lon2 - lon1) * M_PI / 180.0;
 
-    // convert to radians
     lat1 = (lat1) * M_PI / 180.0;
     lat2 = (lat2) * M_PI / 180.0;
 
-    // apply formulae
     double a = pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(lat1) * cos(lat2);
     double rad = 6371;
     double c = 2 * asin(sqrt(a));
