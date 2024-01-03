@@ -38,9 +38,9 @@ public:
     */
     Airline getAirline() const;
 
-    //string getsrc();
-    //string getdest();
-    //Airline getAirline();
+    string getsrc();
+    string getdest();
+    Airline getAirline();
 };
 
 
