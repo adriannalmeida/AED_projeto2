@@ -18,7 +18,7 @@ void loadingAnimation(int durationSeconds) {
         }
         std::cout << "] " << int((float)i / (durationSeconds * 10) * 100.0) << "% " << std::flush;
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(180));
     }
 
     std::cout << "\r              \r";
@@ -26,7 +26,7 @@ void loadingAnimation(int durationSeconds) {
 
 int main() {
     int durationSeconds = 5;
-    std::cout << "LOADING...\n";
+    std::cout << "                       LOADING...\n";
 
     // Cria uma thread para a animação de carregamento
     std::thread loadingThread(loadingAnimation, durationSeconds);
