@@ -325,6 +325,7 @@ void menu::menuAirports() {
 vector<Airport*> menu::SelectAirportSrc() {
     int size = 4, select = 0;
     vector<string> options = {"1.Airport code", "2.Airport name", "3.City", "4.Coordinates"};
+    system("clear");
     std::cout << "_______________________________________________\n";
     std::cout << "                SelectAirportSrc               \n";
     std::cout << "|          Choose one of the options          |\n";
@@ -379,6 +380,7 @@ vector<Airport*> menu::SelectAirportSrc() {
 vector<Airport*> menu::SelectAirportDest() {
     int size = 4, select = 0;
     vector<string> options = {"1.Airport code", "2.Airport name", "3.City", "4.Coordinates"};
+    system("clear");
     std::cout << "_______________________________________________\n";
     std::cout << "                SelectAirportDest              \n";
     std::cout << "|          Choose one of the options          |\n";
