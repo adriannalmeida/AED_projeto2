@@ -321,83 +321,114 @@ void menu::menuAirports() {
 }
 vector<Airport*> menu::SelectAirportSrc() {
     int size = 4, select = 0;
-    vector <string> options = {"Airport code", "Airport name", "City", "Coordenates"};
-    nonBlockingEntrance();
-    auxprintMenu(options, size, select, "Source");
-    restoreEntrace();
+    vector<string> options = {"1.Airport code", "2.Airport name", "3.City", "4.Coordinates"};
+    system("clear");
+    std::cout << "_______________________________________________\n";
+    std::cout << "                SelectAirportSrc               \n";
+    std::cout << "|          Choose one of the options          |\n";
+    std::cout << "|_____________________________________________|\n";
+    std::cout << "            " << options[0] << "\n";
+    std::cout << "            " << options[1] << "\n";
+    std::cout << "            " << options[2] << "\n";
+    std::cout << "            " << options[3] << "\n";
+    std::cout << "|_____________________________________________|\n";
 
     vector<Airport*> selectedAirports;
-    switch (select){
-        case 0:
-        {string airport;
+    cout << "Enter the number corresponding to your choice: ";
+    cin >> select;
+
+    switch (select) {
+        case 1: {
+            string airport;
             cout << "Source:" << endl;
             cin >> airport;
             selectedAirports.push_back(airports[airport]);
-            return selectedAirports;}
-        case 1:
-        {string airport;
+            return selectedAirports;
+        }
+        case 2: {
+            string airport;
             cout << "Source:" << endl;
             cin >> airport;
             selectedAirports.push_back(UsingAirport(airport));
-            return selectedAirports;}
-        case 2:
-        {string airport;
-            cout << "Source:" << endl;
-            cin >> airport;
-            selectedAirports = UsingCity(airport);
-            return selectedAirports;}
-        case 3:
-        {double latitude;
-            double longitude;
+            return selectedAirports;
+        }
+        case 3: {
+            string city;
+            cout << "Source City:" << endl;
+            cin >> city;
+            selectedAirports = UsingCity(city);
+            return selectedAirports;
+        }
+        case 4: {
+            double latitude, longitude;
             cout << "Source Latitude:" << endl;
             cin >> latitude;
             cout << "Source Longitude:" << endl;
             cin >> longitude;
             selectedAirports = UsingLocation(latitude, longitude);
-            return selectedAirports;}
+            return selectedAirports;
+        }
+        default:
+            cout << "Invalid choice. Please select a valid option." << endl;
+            return selectedAirports;
     }
-    return selectedAirports;
 }
 
 vector<Airport*> menu::SelectAirportDest() {
     int size = 4, select = 0;
-    vector <string> options = {"Airport code", "Airport name", "City", "Coordenates"};
-    nonBlockingEntrance();
-    auxprintMenu(options, size, select, "Dest");
-    restoreEntrace();
+    vector<string> options = {"1.Airport code", "2.Airport name", "3.City", "4.Coordinates"};
+    system("clear");
+    std::cout << "_______________________________________________\n";
+    std::cout << "                SelectAirportDest              \n";
+    std::cout << "|          Choose one of the options          |\n";
+    std::cout << "|_____________________________________________|\n";
+    std::cout << "            " << options[0] << "\n";
+    std::cout << "            " << options[1] << "\n";
+    std::cout << "            " << options[2] << "\n";
+    std::cout << "            " << options[3] << "\n";
+    std::cout << "|_____________________________________________|\n";
 
     vector<Airport*> selectedAirports;
-    switch (select){
-        case 0:
-        {string airport;
+    cout << "Enter the number corresponding to your choice: ";
+    cin >> select;
+
+    switch (select) {
+        case 1: {
+            string airport;
             cout << "Destiny:" << endl;
             cin >> airport;
             selectedAirports.push_back(airports[airport]);
-            return selectedAirports;}
-        case 1:
-        {string airport;
+            return selectedAirports;
+        }
+        case 2: {
+            string airport;
             cout << "Destiny:" << endl;
             cin >> airport;
             selectedAirports.push_back(UsingAirport(airport));
-            return selectedAirports;}
-        case 2:
-        {string airport;
-            cout << "Destiny:" << endl;
-            cin >> airport;
-            selectedAirports = UsingCity(airport);
-            return selectedAirports;}
-        case 3:
-        {double latitude;
-            double longitude;
+            return selectedAirports;
+        }
+        case 3: {
+            string city;
+            cout << "Destiny City:" << endl;
+            cin >> city;
+            selectedAirports = UsingCity(city);
+            return selectedAirports;
+        }
+        case 4: {
+            double latitude, longitude;
             cout << "Destiny Latitude:" << endl;
             cin >> latitude;
             cout << "Destiny Longitude:" << endl;
             cin >> longitude;
             selectedAirports = UsingLocation(latitude, longitude);
-            return selectedAirports;}
+            return selectedAirports;
+        }
+        default:
+            cout << "Invalid choice. Please select a valid option." << endl;
+            return selectedAirports;
     }
-    return selectedAirports;
 }
+
 int menu::NumberofAirports() {
     int count = 0;
     for(auto i : Travels.getVertexSet()){
@@ -995,7 +1026,5 @@ void menu::auxArticulationPoints(Vertex<Airport> *v, vector<Airport> & articulat
         }
     }
     v->setProcessing(false);
-
-
 }
 

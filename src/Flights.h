@@ -38,6 +38,9 @@ public:
     */
     Airline getAirline();
 
+    string getsrc();
+    string getdest();
+    Airline getAirline();
 };
 
 
