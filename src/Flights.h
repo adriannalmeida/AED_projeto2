@@ -2,6 +2,7 @@
 #define INC_2PROJETO_FLIGHTS_H
 
 #include "Airline.h"
+#include <string>
 using namespace std;
 class Flights {
 private:
@@ -36,10 +37,6 @@ public:
      * Complexity: O(1)
     * @return Airline
     */
-    Airline getAirline();
-
-    string getsrc();
-    string getdest();
     Airline getAirline();
 };
 
